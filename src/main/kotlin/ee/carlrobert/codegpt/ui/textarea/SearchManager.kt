@@ -84,7 +84,7 @@ class SearchManager(
 
         if (featureType != FeatureType.INLINE_EDIT && featureType != FeatureType.AGENT) {
             val webAction = WebActionItem(tagManager)
-            if (webAction.enabled()) {
+            if (webAction.enabled) {
                 allResults.add(webAction)
             }
         }

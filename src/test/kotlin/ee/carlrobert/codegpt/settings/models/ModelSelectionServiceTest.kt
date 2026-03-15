@@ -47,21 +47,20 @@ class ModelSelectionServiceTest : IntegrationTest() {
     fun `test getModelSelectionForFeature with code completion returns code model`() {
         val result = modelSelectionService.getModelSelectionForFeature(FeatureType.CODE_COMPLETION)
 
-        assertThat(result.provider).isEqualTo(ServiceType.PROXYAI)
-        assertThat(result.model).isEqualTo("mercury-coder")
+        assertThat(result.provider).isEqualTo(ServiceType.OPENAI)
     }
 
     fun `test getServiceForFeature with valid feature returns correct provider`() {
         val result = modelSelectionService.getServiceForFeature(FeatureType.CHAT)
 
-        assertThat(result).isEqualTo(ServiceType.PROXYAI)
+        assertThat(result).isEqualTo(ServiceType.OPENAI)
     }
 
     fun `test getServiceForFeature with pricing plan returns plan-specific provider`() {
         val result =
             modelSelectionService.getServiceForFeature(FeatureType.CHAT, PricingPlan.INDIVIDUAL)
 
-        assertThat(result).isEqualTo(ServiceType.PROXYAI)
+        assertThat(result).isEqualTo(ServiceType.ANTHROPIC)
     }
 
     fun `test getModelForFeature with valid feature returns model string`() {

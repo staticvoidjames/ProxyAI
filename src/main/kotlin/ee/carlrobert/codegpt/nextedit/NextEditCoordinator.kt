@@ -11,7 +11,6 @@ import ee.carlrobert.codegpt.settings.service.ServiceType
 object NextEditCoordinator {
 
     private val providers: Map<ServiceType, NextEditProvider> = mapOf(
-        ServiceType.PROXYAI to ProxyAINextEditProvider(),
         ServiceType.INCEPTION to InceptionNextEditProvider()
     )
 

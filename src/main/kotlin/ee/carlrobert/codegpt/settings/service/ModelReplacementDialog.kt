@@ -69,11 +69,6 @@ class ModelReplacementDialog(
         val registry = ModelRegistry.getInstance()
         return FeatureType.entries.associateWith { featureType ->
             when (serviceType) {
-                ServiceType.PROXYAI -> {
-                    val userDetails = project?.let { CODEGPT_USER_DETAILS.get(it) }
-                    registry.getDefaultModelForFeature(featureType, userDetails?.pricingPlan)
-                }
-
                 ServiceType.CUSTOM_OPENAI -> {
                     val models = registry.getAllModelsForFeature(featureType)
                         .filter { it.provider == serviceType }

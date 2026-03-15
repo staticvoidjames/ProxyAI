@@ -292,15 +292,7 @@ private fun publishCreditsIfAvailable(
     responses: List<Message.Response>,
     events: AgentEvents,
 ) {
-    if (provider != ServiceType.PROXYAI) return
-    val credits = extractCreditsSnapshot(responses) ?: return
-    val event = AgentCreditsEvent(
-        sessionId = sessionId,
-        remaining = credits.remaining,
-        monthlyRemaining = credits.monthlyRemaining,
-        consumed = credits.total
-    )
-    events.onCreditsAvailable(event)
+    // Credits tracking is no longer needed without ProxyAI
 }
 
 @EdgeTransformationDslMarker

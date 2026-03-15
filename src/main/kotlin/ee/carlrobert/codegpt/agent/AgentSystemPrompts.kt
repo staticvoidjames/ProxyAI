@@ -28,25 +28,12 @@ internal object AgentSystemPrompts {
         skills: List<SkillDescriptor> = emptyList()
     ): String {
         val base = when (provider) {
-            ServiceType.PROXYAI -> createProxyAiSystemPrompt(modelSelection, projectPath)
             ServiceType.OPENAI -> createOpenAiSystemPrompt(projectPath)
             ServiceType.GOOGLE -> createGeminiSystemPrompt(projectPath)
             else -> createAnthropicSystemPrompt(projectPath)
         }
         val skillsSection = buildSkillsSection(skills)
         return if (skillsSection.isBlank()) base else "$base\n\n$skillsSection"
-    }
-
-    private fun createProxyAiSystemPrompt(
-        modelSelection: ModelSelection?,
-        projectPath: String?
-    ): String {
-        val modelId = modelSelection?.model
-        return if (modelId == ModelRegistry.PROXYAI_AUTO || modelId?.startsWith("claude") == true) {
-            createAnthropicSystemPrompt(projectPath)
-        } else {
-            createOpenAiSystemPrompt(projectPath)
-        }
     }
 
     private fun createOpenAiSystemPrompt(projectPath: String? = null): String {

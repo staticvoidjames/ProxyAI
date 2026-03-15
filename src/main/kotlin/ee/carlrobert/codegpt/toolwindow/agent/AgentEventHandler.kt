@@ -185,11 +185,7 @@ class AgentEventHandler(
     override fun onClientException(provider: ServiceType, ex: LLMClientException) {
         val cause = ex.cause
         if (cause is KoogHttpClientException) {
-            if (provider == ServiceType.PROXYAI) {
-                handleProxyAIException(cause)
-            } else {
-                handleException(cause)
-            }
+            handleException(cause)
         }
     }
 
@@ -207,30 +203,6 @@ class AgentEventHandler(
 
             else -> {
                 currentResponseBody?.displayError(ex.message)
-                handleDone()
-            }
-        }
-    }
-
-    private fun handleProxyAIException(ex: KoogHttpClientException) {
-        when (ex.statusCode) {
-            401 -> {
-                currentResponseBody?.displayMissingCredential()
-                handleDone()
-            }
-
-            403 -> {
-                currentResponseBody?.displayForbidden()
-                handleDone()
-            }
-
-            429 -> {
-                currentResponseBody?.displayCreditsExhausted()
-                handleDone()
-            }
-
-            else -> {
-                currentResponseBody?.displayError("Something went wrong. Please try again.")
                 handleDone()
             }
         }

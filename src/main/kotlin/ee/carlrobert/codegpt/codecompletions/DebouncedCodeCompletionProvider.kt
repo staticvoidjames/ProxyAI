@@ -6,15 +6,12 @@ import com.intellij.codeInsight.inline.completion.suggestion.InlineCompletionSin
 import com.intellij.codeInsight.inline.completion.suggestion.InlineCompletionSuggestion
 import com.intellij.openapi.components.service
 import ee.carlrobert.codegpt.CodeGPTKeys.REMAINING_CODE_COMPLETION
-import ee.carlrobert.codegpt.codecompletions.edit.GrpcClientService
 import ee.carlrobert.codegpt.settings.service.FeatureType
 import ee.carlrobert.codegpt.settings.service.ModelSelectionService
 import ee.carlrobert.codegpt.settings.service.ServiceType
-import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings
 import ee.carlrobert.codegpt.settings.service.custom.CustomServicesSettings
 import ee.carlrobert.codegpt.settings.service.inception.InceptionSettings
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings
-import ee.carlrobert.codegpt.settings.service.mistral.MistralSettings
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings
 import kotlinx.coroutines.channels.awaitClose
@@ -73,13 +70,6 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
                 var eventListener = CodeCompletionEventListener(request.editor, this)
                 val infillRequest = InfillRequestUtil.buildInfillRequest(request)
 
-                if (service<ModelSelectionService>().getServiceForFeature(FeatureType.CODE_COMPLETION) == ServiceType.PROXYAI) {
-                    val grpcClient = project.service<GrpcClientService>()
-                    grpcClient.cancelCodeCompletion()
-                    grpcClient.getCodeCompletionAsync(infillRequest, eventListener, this)
-                    return@channelFlow
-                }
-
                 val call = service<CodeCompletionService>().getCodeCompletionAsync(
                     infillRequest,
                     CodeCompletionEventListener(request.editor, this)
@@ -119,7 +109,6 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
 
         val codeCompletionsEnabled = try {
             when (selectedService) {
-                ServiceType.PROXYAI -> service<CodeGPTServiceSettings>().state.codeCompletionSettings.codeCompletionsEnabled
                 ServiceType.OPENAI -> OpenAISettings.getCurrentState().isCodeCompletionsEnabled
                 ServiceType.CUSTOM_OPENAI -> {
                     println("DEBUG: Calling customServiceStateForFeatureType...")
@@ -132,7 +121,6 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
 
                 ServiceType.LLAMA_CPP -> LlamaSettings.isCodeCompletionsPossible()
                 ServiceType.OLLAMA -> service<OllamaSettings>().state.codeCompletionsEnabled
-                ServiceType.MISTRAL -> MistralSettings.getCurrentState().isCodeCompletionsEnabled
                 ServiceType.INCEPTION -> service<InceptionSettings>().state.codeCompletionsEnabled
                 ServiceType.ANTHROPIC,
                 ServiceType.GOOGLE -> false

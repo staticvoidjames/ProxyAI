@@ -23,7 +23,6 @@ import ai.koog.prompt.dsl.prompt
 import ai.koog.prompt.executor.clients.LLMClient
 import ai.koog.prompt.executor.clients.anthropic.AnthropicLLMClient
 import ai.koog.prompt.executor.clients.google.GoogleLLMClient
-import ai.koog.prompt.executor.clients.mistralai.MistralAILLMClient
 import ai.koog.prompt.executor.clients.openai.OpenAILLMClient
 import ai.koog.prompt.executor.model.PromptExecutor
 import ai.koog.prompt.executor.ollama.client.OllamaClient
@@ -32,8 +31,10 @@ import ai.koog.prompt.tokenizer.Tokenizer
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import ee.carlrobert.codegpt.EncodingManager
-import ee.carlrobert.codegpt.agent.clients.*
-import ee.carlrobert.codegpt.agent.credits.extractCreditsSnapshot
+import ee.carlrobert.codegpt.agent.clients.CustomOpenAILLMClient
+import ee.carlrobert.codegpt.agent.clients.HttpClientProvider
+import ee.carlrobert.codegpt.agent.clients.InceptionAILLMClient
+import ee.carlrobert.codegpt.agent.clients.RetryingPromptExecutor
 import ee.carlrobert.codegpt.agent.tools.*
 import ee.carlrobert.codegpt.credentials.CredentialsStore.CredentialKey
 import ee.carlrobert.codegpt.credentials.CredentialsStore.getCredential
@@ -197,11 +198,6 @@ object AgentFactory {
                 )
             }
 
-            ServiceType.MISTRAL -> {
-                val apiKey = getCredential(CredentialKey.MistralApiKey) ?: ""
-                createRetryingExecutor(MistralAILLMClient(apiKey, baseClient = httpClient), events)
-            }
-
             ServiceType.CUSTOM_OPENAI -> {
                 val state = service<CustomServicesSettings>()
                     .customServiceStateForFeatureType(FeatureType.AGENT)
@@ -218,11 +214,6 @@ object AgentFactory {
                     ),
                     events
                 )
-            }
-
-            ServiceType.PROXYAI -> {
-                val apiKey = getCredential(CredentialKey.CodeGptApiKey) ?: ""
-                createRetryingExecutor(ProxyAILLMClient(apiKey, baseClient = httpClient), events)
             }
 
             ServiceType.INCEPTION -> {
@@ -411,28 +402,7 @@ object AgentFactory {
         handleEvents {
             onToolCallStarting { ctx -> onAgentToolCallStarting?.invoke(ctx) }
             onToolCallCompleted { ctx -> onAgentToolCallCompleted?.invoke(ctx) }
-            onNodeExecutionCompleted { ctx ->
-                val responses = (ctx.output as? List<*>)?.filterIsInstance<Message.Response>()
-                    ?: return@onNodeExecutionCompleted
-                if (responses.isEmpty()) return@onNodeExecutionCompleted
-                if (provider == ServiceType.PROXYAI) {
-                    extractCredits(responses, sessionId)?.let { onCreditsAvailable?.invoke(it) }
-                }
-            }
         }
-    }
-
-    private fun extractCredits(
-        responses: List<Message.Response>,
-        sessionId: String
-    ): AgentCreditsEvent? {
-        val credits = extractCreditsSnapshot(responses) ?: return null
-        return AgentCreditsEvent(
-            sessionId = sessionId,
-            remaining = credits.remaining,
-            monthlyRemaining = credits.monthlyRemaining,
-            consumed = credits.total
-        )
     }
 
     private fun singleRunWithParallelAbility(

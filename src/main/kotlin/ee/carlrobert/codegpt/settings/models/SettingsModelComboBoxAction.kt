@@ -63,12 +63,10 @@ class SettingsModelComboBoxAction(
         val groupedModels = models.groupBy { it.provider }
 
         val cloudProviders = listOf(
-            ServiceType.PROXYAI,
             ServiceType.ANTHROPIC,
             ServiceType.OPENAI,
             ServiceType.CUSTOM_OPENAI,
             ServiceType.GOOGLE,
-            ServiceType.MISTRAL,
             ServiceType.INCEPTION
         )
         val hasCloudProviders = cloudProviders.any { groupedModels.containsKey(it) }
@@ -78,36 +76,13 @@ class SettingsModelComboBoxAction(
 
             cloudProviders.forEach { provider ->
                 groupedModels[provider]?.let { providerModels ->
-                    when (provider) {
-                        ServiceType.PROXYAI -> {
-                            val group = DefaultActionGroup.createPopupGroup { "ProxyAI" }
-                            group.templatePresentation.icon = Icons.DefaultSmall
-                            providerModels.forEach { model ->
-                                group.add(createModelAction(model))
-                            }
-                            actionGroup.add(group)
-                        }
-
-                        ServiceType.ANTHROPIC -> {
-                            val group = DefaultActionGroup.createPopupGroup { provider.label }
-                            group.templatePresentation.icon =
-                                ModelIcons.getIconForProvider(provider)
-                            providerModels.forEach { model ->
-                                group.add(createModelAction(model))
-                            }
-                            actionGroup.add(group)
-                        }
-
-                        else -> {
-                            val group = DefaultActionGroup.createPopupGroup { provider.label }
-                            group.templatePresentation.icon =
-                                ModelIcons.getIconForProvider(provider)
-                            providerModels.forEach { model ->
-                                group.add(createModelAction(model))
-                            }
-                            actionGroup.add(group)
-                        }
+                    val group = DefaultActionGroup.createPopupGroup { provider.label }
+                    group.templatePresentation.icon =
+                        ModelIcons.getIconForProvider(provider)
+                    providerModels.forEach { model ->
+                        group.add(createModelAction(model))
                     }
+                    actionGroup.add(group)
                 }
             }
         }

@@ -195,10 +195,10 @@ tasks {
     }
 
     prepareSandbox {
-        dependsOn("updateSubmodules")
-        from(layout.projectDirectory.dir("src/main/cpp/llama.cpp")) {
-            into("ProxyAI/llama.cpp")
-        }
+        // dependsOn("updateSubmodules")
+        // from(layout.projectDirectory.dir("src/main/cpp/llama.cpp")) {
+        //     into("ProxyAI/llama.cpp")
+        // }
     }
 
     runIde {

@@ -11,10 +11,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import ee.carlrobert.codegpt.CodeGPTKeys
 import ee.carlrobert.codegpt.nextedit.NextEditCoordinator
-import ee.carlrobert.codegpt.settings.service.FeatureType
-import ee.carlrobert.codegpt.settings.service.ModelSelectionService
-import ee.carlrobert.codegpt.settings.service.ServiceType
-import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings
 import ee.carlrobert.codegpt.ui.OverlayUtil.showNotification
 import ee.carlrobert.llm.client.openai.completion.ErrorDetails
 import ee.carlrobert.llm.completion.CompletionEventListener
@@ -85,14 +81,6 @@ class CodeCompletionEventListener(
     }
 
     override fun onError(error: ErrorDetails, ex: Throwable) {
-        val isCodeGPTService =
-            service<ModelSelectionService>().getServiceForFeature(FeatureType.CODE_COMPLETION) == ServiceType.PROXYAI
-        if (isCodeGPTService && "RATE_LIMIT_EXCEEDED" == error.code) {
-            service<CodeGPTServiceSettings>().state
-                .codeCompletionSettings
-                .codeCompletionsEnabled = false
-        }
-
         if (ex.message == null || (ex.message != null && ex.message != "Canceled")) {
             showNotification(error.message, NotificationType.ERROR)
             logger.error(error.message, ex)

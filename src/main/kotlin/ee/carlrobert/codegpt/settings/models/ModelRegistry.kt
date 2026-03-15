@@ -6,7 +6,6 @@ import ai.koog.prompt.executor.clients.anthropic.AnthropicModels.Sonnet_4_5
 import ai.koog.prompt.executor.clients.google.GoogleModels.Gemini2_5Flash
 import ai.koog.prompt.executor.clients.google.GoogleModels.Gemini2_5Pro
 import ai.koog.prompt.executor.clients.google.GoogleModels.Gemini3_Pro_Preview
-import ai.koog.prompt.executor.clients.mistralai.MistralAIModels.Chat.DevstralMedium
 import ai.koog.prompt.executor.clients.openai.OpenAIModels.Chat.GPT4_1
 import ai.koog.prompt.executor.clients.openai.OpenAIModels.Chat.GPT4_1Mini
 import ai.koog.prompt.executor.clients.openai.OpenAIModels.Chat.GPT5Mini
@@ -23,16 +22,15 @@ import com.intellij.openapi.diagnostic.thisLogger
 import ee.carlrobert.codegpt.Icons
 import ee.carlrobert.codegpt.agent.clients.CustomOpenAILLMClient
 import ee.carlrobert.codegpt.agent.clients.InceptionAILLMClient
-import ee.carlrobert.codegpt.agent.clients.ProxyAILLMClient
 import ee.carlrobert.codegpt.completions.llama.LlamaModel
 import ee.carlrobert.codegpt.settings.models.ModelRegistry.Companion.MERCURY
 import ee.carlrobert.codegpt.settings.service.FeatureType
 import ee.carlrobert.codegpt.settings.service.ServiceType
 import ee.carlrobert.codegpt.settings.service.custom.CustomServicesSettings
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings
-import ee.carlrobert.llm.client.codegpt.PricingPlan
 import ee.carlrobert.llm.client.google.models.GoogleModel
 import ee.carlrobert.llm.client.openai.completion.OpenAIChatCompletionModel
+import ee.carlrobert.llm.client.codegpt.PricingPlan
 import javax.swing.Icon
 
 data class ModelSelection(
@@ -63,19 +61,6 @@ class ModelRegistry {
     private val logger = thisLogger()
 
     private val providerCapabilities = mapOf(
-        ServiceType.PROXYAI to ModelCapability(
-            ServiceType.PROXYAI,
-            setOf(
-                FeatureType.AGENT,
-                FeatureType.CHAT,
-                FeatureType.CODE_COMPLETION,
-                FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
-                FeatureType.INLINE_EDIT,
-                FeatureType.NEXT_EDIT,
-                FeatureType.LOOKUP
-            )
-        ),
         ServiceType.OPENAI to ModelCapability(
             ServiceType.OPENAI,
             setOf(
@@ -104,18 +89,6 @@ class ModelRegistry {
             setOf(
                 FeatureType.AGENT,
                 FeatureType.CHAT,
-                FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
-                FeatureType.INLINE_EDIT,
-                FeatureType.LOOKUP
-            )
-        ),
-        ServiceType.MISTRAL to ModelCapability(
-            ServiceType.MISTRAL,
-            setOf(
-                FeatureType.AGENT,
-                FeatureType.CHAT,
-                FeatureType.CODE_COMPLETION,
                 FeatureType.AUTO_APPLY,
                 FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
@@ -171,114 +144,114 @@ class ModelRegistry {
     private val pricingPlanBasedDefaults = mapOf(
         PricingPlan.ANONYMOUS to mapOf(
             FeatureType.AGENT to ModelSelection(
-                ServiceType.PROXYAI,
-                PROXYAI_AUTO,
-                "Auto"
+                ServiceType.OPENAI,
+                GPT5_2.id,
+                "GPT-5.2"
             ),
             FeatureType.CHAT to ModelSelection(
-                ServiceType.PROXYAI,
-                GEMINI_FLASH_2_5,
-                "Gemini Flash 2.5"
+                ServiceType.OPENAI,
+                GPT_5_MINI,
+                "GPT-5 Mini"
             ),
             FeatureType.AUTO_APPLY to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
             FeatureType.COMMIT_MESSAGE to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.OPENAI,
                 GPT_5_MINI,
                 "GPT-5 Mini"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
-                ServiceType.PROXYAI,
-                GEMINI_FLASH_2_5,
-                "Gemini Flash 2.5"
+                ServiceType.OPENAI,
+                GPT_5_MINI,
+                "GPT-5 Mini"
             ),
             FeatureType.LOOKUP to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.OPENAI,
                 GPT_5_MINI,
                 "GPT-5 Mini"
             ),
             FeatureType.CODE_COMPLETION to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
             FeatureType.NEXT_EDIT to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             )
         ),
         PricingPlan.FREE to mapOf(
             FeatureType.AGENT to ModelSelection(
-                ServiceType.PROXYAI,
-                PROXYAI_AUTO,
-                "Auto"
+                ServiceType.OPENAI,
+                GPT5_2.id,
+                "GPT-5.2"
             ),
-            FeatureType.CHAT to ModelSelection(ServiceType.PROXYAI, QWEN3_CODER, "Qwen3 Coder"),
+            FeatureType.CHAT to ModelSelection(ServiceType.OPENAI, GPT_5_MINI, "GPT-5 Mini"),
             FeatureType.AUTO_APPLY to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
             FeatureType.COMMIT_MESSAGE to ModelSelection(
-                ServiceType.PROXYAI,
-                QWEN3_CODER,
-                "Qwen3 Coder"
+                ServiceType.OPENAI,
+                GPT_5_MINI,
+                "GPT-5 Mini"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
-                ServiceType.PROXYAI,
-                QWEN3_CODER,
-                "Qwen3 Coder"
+                ServiceType.OPENAI,
+                GPT_5_MINI,
+                "GPT-5 Mini"
             ),
-            FeatureType.LOOKUP to ModelSelection(ServiceType.PROXYAI, QWEN3_CODER, "Qwen3 Coder"),
+            FeatureType.LOOKUP to ModelSelection(ServiceType.OPENAI, GPT_5_MINI, "GPT-5 Mini"),
             FeatureType.CODE_COMPLETION to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
             FeatureType.NEXT_EDIT to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             )
         ),
         PricingPlan.INDIVIDUAL to mapOf(
             FeatureType.AGENT to ModelSelection(
-                ServiceType.PROXYAI,
-                PROXYAI_AUTO,
-                "Auto"
+                ServiceType.OPENAI,
+                GPT5_2.id,
+                "GPT-5.2"
             ),
             FeatureType.CHAT to ModelSelection(
-                ServiceType.PROXYAI,
-                CLAUDE_4_5_SONNET_THINKING,
-                "Claude 4.5 Sonnet Thinking"
+                ServiceType.OPENAI,
+                GPT5_2.id,
+                "GPT-5.2"
             ),
             FeatureType.AUTO_APPLY to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
             FeatureType.COMMIT_MESSAGE to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.OPENAI,
                 GPT_5_CODEX,
                 "GPT-5 Codex"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
-                ServiceType.PROXYAI,
-                CLAUDE_4_5_SONNET,
-                "Claude 4 Sonnet"
+                ServiceType.OPENAI,
+                GPT_5_MINI,
+                "GPT-5 Mini"
             ),
-            FeatureType.LOOKUP to ModelSelection(ServiceType.PROXYAI, GPT_5_CODEX, "GPT-5 Codex"),
+            FeatureType.LOOKUP to ModelSelection(ServiceType.OPENAI, GPT_5_CODEX, "GPT-5 Codex"),
             FeatureType.CODE_COMPLETION to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
             FeatureType.NEXT_EDIT to ModelSelection(
-                ServiceType.PROXYAI,
+                ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
             )
@@ -287,37 +260,37 @@ class ModelRegistry {
 
     private val fallbackDefaults = mapOf(
         FeatureType.AGENT to ModelSelection(
-            ServiceType.PROXYAI,
-            PROXYAI_AUTO,
-            "Auto"
+            ServiceType.OPENAI,
+            GPT5_2.id,
+            "GPT-5.2"
         ),
         FeatureType.CHAT to ModelSelection(
-            ServiceType.PROXYAI,
-            GEMINI_FLASH_2_5,
-            "Gemini Flash 2.5"
+            ServiceType.OPENAI,
+            GPT_5_MINI,
+            "GPT-5 Mini"
         ),
         FeatureType.AUTO_APPLY to ModelSelection(
-            ServiceType.PROXYAI,
+            ServiceType.INCEPTION,
             MERCURY_CODER,
             "Mercury Coder"
         ),
         FeatureType.COMMIT_MESSAGE to ModelSelection(
-            ServiceType.PROXYAI,
+            ServiceType.OPENAI,
             GPT_5_MINI,
             "GPT-5 Mini"
         ),
         FeatureType.INLINE_EDIT to ModelSelection(
-            ServiceType.PROXYAI,
-            GEMINI_FLASH_2_5,
-            "Gemini Flash 2.5"
+            ServiceType.OPENAI,
+            GPT_5_MINI,
+            "GPT-5 Mini"
         ),
-        FeatureType.LOOKUP to ModelSelection(ServiceType.PROXYAI, GPT_5_MINI, "GPT-5 Mini"),
+        FeatureType.LOOKUP to ModelSelection(ServiceType.OPENAI, GPT_5_MINI, "GPT-5 Mini"),
         FeatureType.CODE_COMPLETION to ModelSelection(
-            ServiceType.PROXYAI,
+            ServiceType.INCEPTION,
             MERCURY_CODER,
             "Mercury Coder"
         ),
-        FeatureType.NEXT_EDIT to ModelSelection(ServiceType.PROXYAI, MERCURY_CODER, "Mercury Coder")
+        FeatureType.NEXT_EDIT to ModelSelection(ServiceType.INCEPTION, MERCURY_CODER, "Mercury Coder")
     )
 
     fun getAllModelsForFeature(featureType: FeatureType): List<ModelSelection> {
@@ -382,42 +355,8 @@ class ModelRegistry {
 
     data class LLMModelWrapper(val model: LLModel, val id: String = "", val name: String = "")
 
-    private fun getProxyAIModelWrapper(id: String, name: String): LLMModelWrapper {
-        return LLMModelWrapper(
-            model = LLModel(
-                id = id,
-                provider = ProxyAILLMClient.ProxyAI,
-                capabilities = listOf(
-                    LLMCapability.Temperature,
-                    LLMCapability.Schema.JSON.Basic,
-                    LLMCapability.Schema.JSON.Standard,
-                    LLMCapability.Speculation,
-                    LLMCapability.Tools,
-                    LLMCapability.ToolChoice,
-                    LLMCapability.Vision.Image,
-                    LLMCapability.Document,
-                    LLMCapability.Completion,
-                    LLMCapability.MultipleChoices,
-                    LLMCapability.OpenAIEndpoint.Completions,
-                ),
-                contextLength = 200_000,
-                maxOutputTokens = 32_768,
-            ),
-            name = name
-        )
-    }
-
     fun getAgentModels(): Map<ServiceType, List<LLMModelWrapper>> {
         return mapOf(
-            ServiceType.PROXYAI to listOf(
-                getProxyAIModelWrapper(PROXYAI_AUTO, "Auto"),
-                getProxyAIModelWrapper(GPT5_2.id, "GPT-5.2"),
-                getProxyAIModelWrapper(GPT5_2_Codex.id, "GPT-5.2 Codex"),
-                getProxyAIModelWrapper(GPT5Mini.id, "GPT-5 Mini"),
-                getProxyAIModelWrapper(Opus_4_5.id, "Claude Opus 4.5"),
-                getProxyAIModelWrapper(Sonnet_4_5.id, "Claude Sonnet 4.5"),
-                getProxyAIModelWrapper(Haiku_4_5.id, "Claude Haiku 4.5"),
-            ),
             ServiceType.OPENAI to listOf(
                 LLMModelWrapper(GPT5_2, name = "GPT-5.2"),
                 LLMModelWrapper(GPT5_2_Codex, name = "GPT-5.2 Codex"),
@@ -463,10 +402,6 @@ class ModelRegistry {
                 LLMModelWrapper(Gemini2_5Pro, name = "Gemini 2.5 Pro"),
                 LLMModelWrapper(Gemini2_5Flash, name = "Gemini 2.5 Flash")
             ),
-            ServiceType.MISTRAL to listOf(
-                LLMModelWrapper(Devstral2, name = "Devstral 2"),
-                LLMModelWrapper(DevstralMedium, name = "Devstral Medium"),
-            ),
             ServiceType.INCEPTION to listOf(
                 LLMModelWrapper(model = Mercury, name = "Mercury"),
             ),
@@ -499,12 +434,10 @@ class ModelRegistry {
 
     private fun getAllAgentModels(): List<ModelSelection> {
         return buildList {
-            addAll(getProxyAIAgentModels())
             addAll(getAnthropicAgentModels())
             addAll(getOpenAIAgentModels())
             addAll(getCustomOpenAIModels())
             addAll(getGoogleAgentModels())
-            addAll(getMistralAgentModels())
             addAll(getOllamaModels())
             addAll(getInceptionAgentModels())
         }
@@ -517,28 +450,6 @@ class ModelRegistry {
             ModelSelection(ServiceType.OPENAI, GPT5_1.id, "GPT-5.1", Icons.OpenAI),
             ModelSelection(ServiceType.OPENAI, GPT5_1Codex.id, "GPT-5.1 Codex", Icons.OpenAI),
             ModelSelection(ServiceType.OPENAI, GPT5Mini.id, "GPT-5 Mini", Icons.OpenAI),
-        )
-    }
-
-    private fun getProxyAIAgentModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(ServiceType.PROXYAI, PROXYAI_AUTO, "Auto", Icons.DefaultSmall),
-            ModelSelection(ServiceType.PROXYAI, GPT5_2.id, "GPT-5.2", Icons.OpenAI),
-            ModelSelection(ServiceType.PROXYAI, GPT5_2_Codex.id, "GPT-5.2 Codex", Icons.OpenAI),
-            ModelSelection(ServiceType.PROXYAI, GPT5Mini.id, "GPT-5 Mini", Icons.OpenAI),
-            ModelSelection(ServiceType.PROXYAI, Opus_4_5.id, "Claude Opus 4.5", Icons.Anthropic),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                Sonnet_4_5.id,
-                "Claude Sonnet 4.5",
-                Icons.Anthropic
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                Haiku_4_5.id,
-                "Claude Haiku 4.5",
-                Icons.Anthropic
-            ),
         )
     }
 
@@ -584,30 +495,11 @@ class ModelRegistry {
         )
     }
 
-    fun getMistralAgentModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(
-                ServiceType.MISTRAL,
-                Devstral2.id,
-                "Devstral 2",
-                Icons.Mistral
-            ),
-            ModelSelection(
-                ServiceType.MISTRAL,
-                DevstralMedium.id,
-                "Devstral Medium",
-                Icons.Mistral
-            ),
-        )
-    }
-
     private fun getAllChatModels(): List<ModelSelection> {
         return buildList {
-            addAll(getProxyAIChatModels())
             addAll(getOpenAIChatModels())
             addAll(getAnthropicModels())
             addAll(getGoogleModels())
-            addAll(getMistralModels())
             addAll(getLlamaModels())
             addAll(getOllamaModels())
             addAll(getCustomOpenAIModels())
@@ -617,11 +509,9 @@ class ModelRegistry {
 
     private fun getAllApplyModels(): List<ModelSelection> {
         return buildList {
-            addAll(getProxyAIApplyModels())
             addAll(getOpenAIChatModels())
             addAll(getAnthropicModels())
             addAll(getGoogleModels())
-            addAll(getMistralModels())
             addAll(getLlamaModels())
             addAll(getOllamaModels())
             addAll(getCustomOpenAIModels())
@@ -631,9 +521,7 @@ class ModelRegistry {
 
     private fun getAllCodeModels(): List<ModelSelection> {
         return buildList {
-            addAll(getProxyAICodeModels())
             add(getOpenAICodeModel())
-            addAll(getMistralCodeModels())
             addAll(getLlamaModels())
             addAll(getCustomOpenAICodeModels())
             addAll(getOllamaModels())
@@ -668,7 +556,6 @@ class ModelRegistry {
 
     private fun getNextEditModels(): List<ModelSelection> {
         return listOf(
-            ModelSelection(ServiceType.PROXYAI, MERCURY_CODER, "Mercury Coder"),
             ModelSelection(ServiceType.INCEPTION, MERCURY_CODER, "Mercury Coder")
         )
     }
@@ -683,115 +570,6 @@ class ModelRegistry {
     fun getInceptionAgentModels(): List<ModelSelection> {
         return listOf(
             ModelSelection(ServiceType.INCEPTION, MERCURY, "Mercury"),
-        )
-    }
-
-    fun getProxyAIChatModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(
-                ServiceType.PROXYAI,
-                GPT_5_CODEX,
-                "GPT-5 Codex",
-                Icons.OpenAI,
-                PricingPlan.INDIVIDUAL
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                GPT_5_MINI,
-                "GPT-5 Mini",
-                Icons.OpenAI,
-                PricingPlan.ANONYMOUS
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                CLAUDE_4_5_SONNET_THINKING,
-                "Claude Sonnet 4.5 (thinking)",
-                Icons.Anthropic,
-                PricingPlan.INDIVIDUAL
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                CLAUDE_4_5_SONNET,
-                "Claude Sonnet 4.5",
-                Icons.Anthropic,
-                PricingPlan.INDIVIDUAL
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                GEMINI_PRO_2_5,
-                "Gemini 3.0 Pro Preview",
-                Icons.Google,
-                PricingPlan.INDIVIDUAL
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                GEMINI_FLASH_2_5,
-                "Gemini 2.5 Flash",
-                Icons.Google,
-                PricingPlan.ANONYMOUS
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                DEEPSEEK_R1,
-                "DeepSeek R1",
-                Icons.DeepSeek,
-                PricingPlan.INDIVIDUAL
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                DEEPSEEK_V3,
-                "DeepSeek V3",
-                Icons.DeepSeek,
-                PricingPlan.FREE
-            ),
-            ModelSelection(
-                ServiceType.PROXYAI,
-                QWEN3_CODER,
-                "Qwen3 Coder",
-                Icons.Qwen,
-                PricingPlan.FREE
-            )
-        )
-    }
-
-    fun getProxyAIApplyModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(
-                ServiceType.PROXYAI,
-                MERCURY_CODER,
-                "Mercury Coder",
-                Icons.Inception,
-                PricingPlan.FREE
-            ),
-            ModelSelection(ServiceType.PROXYAI, MORPH, "Morph", Icons.Morph, PricingPlan.FREE),
-            ModelSelection(ServiceType.PROXYAI, RELACE, "Relace", Icons.Relace, PricingPlan.FREE),
-        )
-    }
-
-    fun getProxyAIChatModelsForPricingPlan(userPricingPlan: PricingPlan?): List<ModelSelection> {
-        val allModels = getProxyAIChatModels()
-        return when (userPricingPlan) {
-            null, PricingPlan.ANONYMOUS -> allModels.filter {
-                it.pricingPlan == PricingPlan.ANONYMOUS || it.pricingPlan == PricingPlan.FREE || it.pricingPlan == PricingPlan.INDIVIDUAL
-            }
-
-            PricingPlan.FREE -> allModels.filter {
-                it.pricingPlan != PricingPlan.INDIVIDUAL
-            }
-
-            PricingPlan.INDIVIDUAL -> allModels
-        }
-    }
-
-    private fun getProxyAICodeModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(
-                ServiceType.PROXYAI,
-                MERCURY_CODER,
-                "Mercury Coder",
-                Icons.Inception,
-                PricingPlan.FREE
-            ),
         )
     }
 
@@ -874,19 +652,6 @@ class ModelRegistry {
         )
     }
 
-    private fun getMistralModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(ServiceType.MISTRAL, Devstral2.id, "Devstral 2"),
-            ModelSelection(ServiceType.MISTRAL, DEVSTRAL_MEDIUM_2507, "Devstral Medium"),
-            ModelSelection(ServiceType.MISTRAL, MISTRAL_LARGE_2411, "Mistral Large"),
-            ModelSelection(ServiceType.MISTRAL, CODESTRAL_LATEST, "Codestral"),
-        )
-    }
-
-    private fun getMistralCodeModels(): List<ModelSelection> {
-        return listOf(ModelSelection(ServiceType.MISTRAL, CODESTRAL_LATEST, "Codestral"))
-    }
-
     private fun getOllamaModels(): List<ModelSelection> {
         return try {
             val ollamaSettings = service<OllamaSettings>()
@@ -939,7 +704,6 @@ class ModelRegistry {
 
     companion object {
         // ProxyAI Models
-        const val PROXYAI_AUTO = "auto"
         const val GEMINI_PRO_2_5 = "gemini-pro-2.5"
         const val GEMINI_FLASH_2_5 = "gemini-flash-2.5"
         const val CLAUDE_4_SONNET = "claude-4-sonnet"
@@ -979,11 +743,6 @@ class ModelRegistry {
 
         // Google Models
         const val GEMINI_2_0_FLASH = "gemini-2.0-flash"
-
-        // Mistral Models
-        const val MISTRAL_LARGE_2411 = "mistral-large-2411"
-        const val DEVSTRAL_MEDIUM_2507 = "devstral-medium-2507"
-        const val CODESTRAL_LATEST = "codestral-latest"
 
         // Ollama default models
         const val LLAMA_3_2 = "llama3.2"
@@ -1039,20 +798,6 @@ public val GPT5_2_Codex: LLModel = LLModel(
     ),
     contextLength = 400_000,
     maxOutputTokens = 128_000,
-)
-
-public val Devstral2: LLModel = LLModel(
-    provider = LLMProvider.MistralAI,
-    id = "devstral-2512",
-    capabilities = listOf(
-        LLMCapability.Temperature,
-        LLMCapability.Completion,
-        LLMCapability.Tools,
-        LLMCapability.ToolChoice,
-        LLMCapability.Schema.JSON.Basic,
-        LLMCapability.Schema.JSON.Standard
-    ),
-    contextLength = 128_000
 )
 
 public val Mercury: LLModel = LLModel(

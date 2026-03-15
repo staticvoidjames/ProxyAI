@@ -78,7 +78,7 @@ class ModelSelectionService {
             getModelSelectionForFeature(featureType, pricingPlan).provider
         } catch (exception: Exception) {
             logger.warn("Error getting service for feature: $featureType, using default", exception)
-            ServiceType.PROXYAI
+            ServiceType.OPENAI
         }
     }
 

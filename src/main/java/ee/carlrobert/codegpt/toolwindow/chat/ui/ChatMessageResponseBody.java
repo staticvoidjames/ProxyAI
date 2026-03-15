@@ -33,9 +33,6 @@ import ee.carlrobert.codegpt.events.CodeGPTEvent;
 import ee.carlrobert.codegpt.events.EventDetails;
 import ee.carlrobert.codegpt.events.WebSearchEventDetails;
 import ee.carlrobert.codegpt.settings.GeneralSettingsConfigurable;
-import ee.carlrobert.codegpt.settings.service.FeatureType;
-import ee.carlrobert.codegpt.settings.service.ModelSelectionService;
-import ee.carlrobert.codegpt.settings.service.ServiceType;
 import ee.carlrobert.codegpt.toolwindow.chat.editor.ResponseEditorPanel;
 import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.CopyAction;
 import ee.carlrobert.codegpt.toolwindow.chat.editor.header.DefaultHeaderPanel;
@@ -112,18 +109,6 @@ public class ChatMessageResponseBody extends JPanel {
 
     contentPanel.setOpaque(false);
     add(contentPanel, BorderLayout.CENTER);
-
-    if (ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT)
-        == ServiceType.PROXYAI) {
-      if (withProgress) {
-        contentPanel.add(progressPanel);
-      }
-
-      if (webSearchIncluded) {
-        webpageListPanel = createWebpageListPanel(webpageList);
-        contentPanel.add(webpageListPanel);
-      }
-    }
   }
 
   public ChatMessageResponseBody withResponse(@NotNull String response) {
@@ -191,7 +176,7 @@ public class ChatMessageResponseBody extends JPanel {
   }
 
   public void displayCreditsExhausted() {
-    String message = "You’ve used all your ProxyAI credits. <a href=\"https://tryproxy.io/dashboard/billing\">Get more credits</a> to continue.";
+    String message = "You’ve used all your credits. <a href=\"https://tryproxy.io/dashboard/billing\">Get more credits</a> to continue.";
     displayErrorMessage(message, UIUtil::handleHyperlinkClicked);
   }
 

@@ -44,12 +44,10 @@ interface CompletionRequestFactory {
         @JvmStatic
         fun getFactory(serviceType: ServiceType): CompletionRequestFactory {
             return when (serviceType) {
-                ServiceType.PROXYAI -> CodeGPTRequestFactory(ClassStructureSerializer)
                 ServiceType.OPENAI -> OpenAIRequestFactory()
                 ServiceType.CUSTOM_OPENAI -> CustomOpenAIRequestFactory()
                 ServiceType.ANTHROPIC -> ClaudeRequestFactory()
                 ServiceType.GOOGLE -> GoogleRequestFactory()
-                ServiceType.MISTRAL -> MistralRequestFactory()
                 ServiceType.OLLAMA -> OllamaRequestFactory()
                 ServiceType.LLAMA_CPP -> LlamaRequestFactory()
                 ServiceType.INCEPTION -> InceptionRequestFactory()

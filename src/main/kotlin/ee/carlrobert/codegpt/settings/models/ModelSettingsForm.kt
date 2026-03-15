@@ -10,6 +10,7 @@ import ee.carlrobert.codegpt.CodeGPTBundle
 import ee.carlrobert.codegpt.settings.service.FeatureType
 import ee.carlrobert.codegpt.settings.service.ModelChangeNotifier
 import ee.carlrobert.codegpt.settings.service.ServiceType
+import ee.carlrobert.codegpt.settings.service.ServiceType.INCEPTION
 import java.awt.Dimension
 import javax.swing.Box
 import javax.swing.BoxLayout
@@ -128,7 +129,7 @@ class ModelSettingsForm(
         }
         
         val codeCompletionModelState = state.getModelSelection(FeatureType.CODE_COMPLETION)
-        val codeCompletionProvider = codeCompletionModelState?.provider ?: ServiceType.PROXYAI
+        val codeCompletionProvider = codeCompletionModelState?.provider ?: INCEPTION
         updateNextEditButtonState(codeCompletionProvider)
     }
 
@@ -207,8 +208,7 @@ class ModelSettingsForm(
 
     private fun updateNextEditButtonState(codeCompletionProvider: ServiceType) {
         val nextEditButton = modelButtons[FeatureType.NEXT_EDIT] ?: return
-        nextEditButton.isEnabled =
-            codeCompletionProvider == ServiceType.PROXYAI || codeCompletionProvider == ServiceType.INCEPTION
+        nextEditButton.isEnabled = codeCompletionProvider == INCEPTION
     }
 
     fun isModified(): Boolean {

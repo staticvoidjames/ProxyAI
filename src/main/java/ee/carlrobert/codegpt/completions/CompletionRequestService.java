@@ -2,6 +2,7 @@ package ee.carlrobert.codegpt.completions;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
+
 import ee.carlrobert.codegpt.completions.factory.CustomOpenAIRequest;
 import ee.carlrobert.codegpt.credentials.CredentialsStore;
 import ee.carlrobert.codegpt.credentials.CredentialsStore.CredentialKey;
@@ -22,12 +23,14 @@ import ee.carlrobert.llm.client.openai.completion.response.OpenAIChatCompletionR
 import ee.carlrobert.llm.client.openai.completion.response.OpenAIChatCompletionResponseChoiceDelta;
 import ee.carlrobert.llm.completion.CompletionEventListener;
 import ee.carlrobert.llm.completion.CompletionRequest;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -36,6 +39,7 @@ import okhttp3.Response;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSources;
 import okio.Buffer;
+
 import org.jetbrains.annotations.NotNull;
 
 @Service
@@ -206,8 +210,6 @@ public final class CompletionRequestService {
             .getChatCompletionAsync(completionRequest, eventListener);
         case OLLAMA -> CompletionClientProvider.getOllamaClient()
             .getChatCompletionAsync(completionRequest, eventListener);
-        case MISTRAL -> CompletionClientProvider.getMistralClient()
-            .getChatCompletionAsync(completionRequest, eventListener);
         case LLAMA_CPP -> CompletionClientProvider.getLlamaClient()
             .getChatCompletionAsync(completionRequest, eventListener);
         case INCEPTION -> CompletionClientProvider.getInceptionClient()
@@ -238,14 +240,12 @@ public final class CompletionRequestService {
   }
 
   public String getChatCompletion(CompletionRequest request, ServiceType serviceType,
-      FeatureType featureType) {
+                                  FeatureType featureType) {
     if (request instanceof OpenAIChatCompletionRequest completionRequest) {
       var response = switch (serviceType) {
         case OPENAI -> CompletionClientProvider.getOpenAIClient()
             .getChatCompletion(completionRequest);
         case OLLAMA -> CompletionClientProvider.getOllamaClient()
-            .getChatCompletion(completionRequest);
-        case MISTRAL -> CompletionClientProvider.getMistralClient()
             .getChatCompletion(completionRequest);
         case LLAMA_CPP -> CompletionClientProvider.getLlamaClient()
             .getChatCompletion(completionRequest);
@@ -310,11 +310,9 @@ public final class CompletionRequestService {
           CredentialKey.AnthropicApiKey.INSTANCE
       );
       case GOOGLE -> CredentialsStore.INSTANCE.isCredentialSet(CredentialKey.GoogleApiKey.INSTANCE);
-      case MISTRAL ->
-          CredentialsStore.INSTANCE.isCredentialSet(CredentialKey.MistralApiKey.INSTANCE);
       case INCEPTION ->
           CredentialsStore.INSTANCE.isCredentialSet(CredentialKey.InceptionApiKey.INSTANCE);
-      case PROXYAI, CUSTOM_OPENAI, LLAMA_CPP, OLLAMA -> true;
+      case CUSTOM_OPENAI, LLAMA_CPP, OLLAMA -> true;
     };
   }
 

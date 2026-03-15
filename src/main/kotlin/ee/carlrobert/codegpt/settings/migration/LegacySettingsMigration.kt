@@ -52,8 +52,8 @@ object LegacySettingsMigration {
             val codeModel = getLegacyCodeModelForService(selectedService)
             setModelSelection(FeatureType.CODE_COMPLETION, codeModel, selectedService)
 
-            if (selectedService == ServiceType.PROXYAI) {
-                setModelSelection(FeatureType.NEXT_EDIT, ModelRegistry.MERCURY_CODER, ServiceType.PROXYAI)
+            if (selectedService == ServiceType.INCEPTION) {
+                setModelSelection(FeatureType.NEXT_EDIT, ModelRegistry.MERCURY_CODER, ServiceType.INCEPTION)
             } else {
                 setModelSelection(FeatureType.NEXT_EDIT, null, selectedService)
             }
@@ -63,11 +63,6 @@ object LegacySettingsMigration {
     private fun getLegacyChatModelForService(serviceType: ServiceType): String {
         return try {
             when (serviceType) {
-                ServiceType.PROXYAI -> {
-                    val settings = service<CodeGPTServiceSettings>()
-                    settings.state.chatCompletionSettings.model ?: ModelRegistry.GEMINI_FLASH_2_5
-                }
-
                 ServiceType.OPENAI -> {
                     OpenAISettings.getCurrentState().model ?: ModelRegistry.GPT_5
                 }
@@ -103,10 +98,6 @@ object LegacySettingsMigration {
                         ?.takeIf { it.isNotBlank() } ?: "Default"
                 }
 
-                ServiceType.MISTRAL -> {
-                    ModelRegistry.DEVSTRAL_MEDIUM_2507
-                }
-
                 ServiceType.INCEPTION -> {
                     ModelRegistry.MERCURY_CODER
                 }
@@ -126,20 +117,12 @@ object LegacySettingsMigration {
             return fallbackModel
         }
 
-        if (serviceType == ServiceType.PROXYAI) {
-            return ModelRegistry.PROXYAI_AUTO
-        }
-
         return registry.getAgentModels(serviceType).firstOrNull()?.model?.id ?: fallbackModel
     }
 
     private fun getLegacyCodeModelForService(serviceType: ServiceType): String? {
         return try {
             when (serviceType) {
-                ServiceType.PROXYAI -> {
-                    service<CodeGPTServiceSettings>().state.codeCompletionSettings.model
-                }
-
                 ServiceType.OPENAI -> {
                     ModelRegistry.GPT_3_5_TURBO_INSTRUCT
                 }
@@ -169,10 +152,6 @@ object LegacySettingsMigration {
                     service<CustomServicesSettings>().state.services
                         .map { it.name }
                         .lastOrNull() ?: ""
-                }
-
-                ServiceType.MISTRAL -> {
-                    ModelRegistry.CODESTRAL_LATEST
                 }
 
                 ServiceType.INCEPTION -> {

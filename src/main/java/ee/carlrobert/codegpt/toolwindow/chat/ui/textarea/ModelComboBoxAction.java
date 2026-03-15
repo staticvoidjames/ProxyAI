@@ -1,15 +1,12 @@
 package ee.carlrobert.codegpt.toolwindow.chat.ui.textarea;
 
-import static ee.carlrobert.codegpt.CodeGPTKeys.CODEGPT_USER_DETAILS;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.ANTHROPIC;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.CUSTOM_OPENAI;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.GOOGLE;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.INCEPTION;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.LLAMA_CPP;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.MISTRAL;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.OLLAMA;
 import static ee.carlrobert.codegpt.settings.service.ServiceType.OPENAI;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.PROXYAI;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
@@ -44,9 +41,7 @@ import ee.carlrobert.codegpt.settings.service.custom.CustomServiceSettingsState;
 import ee.carlrobert.codegpt.settings.service.custom.CustomServicesSettings;
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings;
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings;
-import ee.carlrobert.codegpt.toolwindow.ui.CodeGPTModelsListPopupAction;
 import ee.carlrobert.codegpt.toolwindow.ui.ModelListPopup;
-import ee.carlrobert.llm.client.codegpt.PricingPlan;
 import ee.carlrobert.llm.client.google.models.GoogleModel;
 import ee.carlrobert.llm.client.openai.completion.OpenAIChatCompletionModel;
 import java.awt.Color;
@@ -150,19 +145,8 @@ public class ModelComboBoxAction extends ComboBoxAction {
   }
 
   private AnAction[] getCodeGPTModelActions(Project project, Presentation presentation) {
-    var registry = ModelRegistry.getInstance();
-    if (featureType == FeatureType.AGENT) {
-      return registry.getAllModelsForFeature(featureType).stream()
-          .filter(model -> model.getProvider() == PROXYAI)
-          .map(model -> createCodeGPTModelAction(model, presentation))
-          .toArray(AnAction[]::new);
-    }
-
-    var userDetails = CODEGPT_USER_DETAILS.get(project);
-    return registry.getProxyAIChatModelsForPricingPlan(
-            userDetails == null ? null : userDetails.getPricingPlan()).stream()
-        .map(model -> createCodeGPTModelAction(model, presentation))
-        .toArray(AnAction[]::new);
+    // ProxyAI models removed
+    return new AnAction[0];
   }
 
   @Override
@@ -171,13 +155,6 @@ public class ModelComboBoxAction extends ComboBoxAction {
     var actionGroup = new DefaultActionGroup();
 
     actionGroup.addSeparator("Cloud");
-
-    if (availableProviders.contains(PROXYAI)) {
-      var proxyAIGroup = DefaultActionGroup.createPopupGroup(() -> "ProxyAI");
-      proxyAIGroup.getTemplatePresentation().setIcon(Icons.DefaultSmall);
-      proxyAIGroup.addAll(getCodeGPTModelActions(project, presentation));
-      actionGroup.add(proxyAIGroup);
-    }
 
     if (availableProviders.contains(ANTHROPIC)) {
       var anthropicGroup = DefaultActionGroup.createPopupGroup(() -> "Anthropic");
@@ -234,20 +211,6 @@ public class ModelComboBoxAction extends ComboBoxAction {
                     .setModel(featureType, item.getModel().getId(), GOOGLE);
               })));
       actionGroup.add(googleGroup);
-    }
-
-    if (availableProviders.contains(MISTRAL)) {
-      var mistralGroup = DefaultActionGroup.createPopupGroup(() -> "Mistral");
-      mistralGroup.getTemplatePresentation().setIcon(Icons.Mistral);
-      ModelRegistry.getInstance().getAgentModels(MISTRAL).forEach(item ->
-          mistralGroup.add(createModelAction(
-              MISTRAL,
-              item.getName(),
-              Icons.Mistral,
-              presentation,
-              () -> ApplicationManager.getApplication().getService(ModelSettings.class)
-                  .setModel(featureType, item.getModel().getId(), MISTRAL))));
-      actionGroup.add(mistralGroup);
     }
 
     if (availableProviders.contains(INCEPTION)) {
@@ -311,16 +274,6 @@ public class ModelComboBoxAction extends ComboBoxAction {
     var modelCode = chatModel != null ? chatModel.getModel() : null;
 
     switch (selectedService) {
-      case PROXYAI:
-        var proxyAIModel = ModelRegistry.getInstance().getAllModelsForFeature(featureType).stream()
-            .filter(it -> it.getProvider() == PROXYAI)
-            .filter(it -> modelCode != null && it.getModel().equals(modelCode))
-            .findFirst();
-        templatePresentation.setIcon(
-            proxyAIModel.map(ModelSelection::getIcon).orElse(Icons.DefaultSmall));
-        templatePresentation.setText(
-            proxyAIModel.map(ModelSelection::getDisplayName).orElse("Unknown"));
-        break;
       case OPENAI:
         templatePresentation.setIcon(Icons.OpenAI);
         var openAIModelName = ModelRegistry.getInstance().getModelDisplayName(OPENAI, modelCode);
@@ -357,10 +310,6 @@ public class ModelComboBoxAction extends ComboBoxAction {
       case GOOGLE:
         templatePresentation.setText(getGooglePresentationText());
         templatePresentation.setIcon(Icons.Google);
-        break;
-      case MISTRAL:
-        templatePresentation.setText(getMistralPresentationText());
-        templatePresentation.setIcon(Icons.Mistral);
         break;
       case INCEPTION:
         templatePresentation.setIcon(Icons.Inception);
@@ -430,40 +379,6 @@ public class ModelComboBoxAction extends ComboBoxAction {
   private void handleModelChange(ServiceType serviceType) {
     updateTemplatePresentation(serviceType);
     onModelChange.accept(serviceType);
-  }
-
-  private AnAction createCodeGPTModelAction(ModelSelection model,
-      Presentation comboBoxPresentation) {
-    var selected = model.getDisplayName().equals(comboBoxPresentation.getText());
-    var locked = shouldLockModel(model);
-    return new CodeGPTModelsListPopupAction(model.getDisplayName(), model.getModel(),
-        model.getIcon() != null ? model.getIcon() : Icons.DefaultSmall,
-        model.getPricingPlan() != null ? model.getPricingPlan() : PricingPlan.ANONYMOUS,
-        locked, selected, () -> {
-      var application = ApplicationManager.getApplication();
-      application
-          .getService(ModelSettings.class)
-          .setModel(featureType, model.getModel(), PROXYAI);
-
-      handleModelChange(PROXYAI);
-    });
-  }
-
-  private boolean shouldLockModel(ModelSelection model) {
-    if (featureType == FeatureType.AGENT) {
-      return false;
-    }
-
-    var userDetails = CODEGPT_USER_DETAILS.get(project);
-    if (userDetails != null) {
-      if (userDetails.getPricingPlan() == PricingPlan.INDIVIDUAL) {
-        return false;
-      }
-      if (userDetails.getPricingPlan() == PricingPlan.FREE) {
-        return model.getPricingPlan() == PricingPlan.INDIVIDUAL;
-      }
-    }
-    return model.getPricingPlan() != PricingPlan.ANONYMOUS;
   }
 
   private AnAction createOllamaModelAction(String model, Presentation comboBoxPresentation) {
@@ -577,17 +492,6 @@ public class ModelComboBoxAction extends ComboBoxAction {
                 LlamaSettings.getCurrentState().getHuggingFaceModel().getCode(), LLAMA_CPP));
   }
 
-  private AnAction createMistralModelAction(String modelCode, Presentation comboBoxPresentation) {
-    var modelName = ModelRegistry.getInstance().getModelDisplayName(MISTRAL, modelCode);
-    return createModelAction(
-        MISTRAL,
-        modelName,
-        Icons.Mistral,
-        comboBoxPresentation,
-        () -> ApplicationManager.getApplication().getService(ModelSettings.class)
-            .setModel(featureType, modelCode, MISTRAL));
-  }
-
   private AnAction createInceptionModelAction(String modelCode, Presentation comboBoxPresentation) {
     var modelName = ModelRegistry.getInstance().getModelDisplayName(INCEPTION, modelCode);
     return createModelAction(
@@ -597,12 +501,5 @@ public class ModelComboBoxAction extends ComboBoxAction {
         comboBoxPresentation,
         () -> ApplicationManager.getApplication().getService(ModelSettings.class)
             .setModel(featureType, modelCode, INCEPTION));
-  }
-
-  private String getMistralPresentationText() {
-    var chatModel = ApplicationManager.getApplication().getService(ModelSettings.class).getState()
-        .getModelSelection(featureType);
-    var modelCode = chatModel != null ? chatModel.getModel() : null;
-    return ModelRegistry.getInstance().getModelDisplayName(MISTRAL, modelCode);
   }
 }

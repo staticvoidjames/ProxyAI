@@ -26,11 +26,7 @@ class TriggerNextEditAction : EditorAction(Handler()), HintManagerImpl.ActionToI
         override fun doExecute(editor: Editor, caret: Caret?, dataContext: DataContext?) {
             val nextEditModelProvider = ModelSelectionService.getInstance()
                 .getServiceForFeature(FeatureType.NEXT_EDIT)
-            if (!listOf(
-                    ServiceType.PROXYAI,
-                    ServiceType.INCEPTION
-                ).contains(nextEditModelProvider)
-            ) {
+            if (nextEditModelProvider != ServiceType.INCEPTION) {
                 return
             }
 

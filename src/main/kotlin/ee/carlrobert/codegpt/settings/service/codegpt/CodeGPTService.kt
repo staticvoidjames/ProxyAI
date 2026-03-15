@@ -9,8 +9,6 @@ import ee.carlrobert.codegpt.completions.CompletionClientProvider
 import ee.carlrobert.codegpt.credentials.CredentialsStore.CredentialKey.CodeGptApiKey
 import ee.carlrobert.codegpt.credentials.CredentialsStore.getCredential
 import ee.carlrobert.codegpt.settings.GeneralSettings
-import ee.carlrobert.codegpt.settings.service.ModelReplacementDialog
-import ee.carlrobert.codegpt.settings.service.ServiceType
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTUserDetailsNotifier.Companion.CODEGPT_USER_DETAILS_TOPIC
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
@@ -47,12 +45,6 @@ class CodeGPTService private constructor(val project: Project) {
 
                 CODEGPT_USER_DETAILS.set(project, userDetails)
 
-                if (showDialog) {
-                    val modality = modalityState ?: ModalityState.NON_MODAL
-                    ApplicationManager.getApplication().invokeLater({
-                        ModelReplacementDialog.showDialog(ServiceType.PROXYAI)
-                    }, modality)
-                }
                 project.messageBus
                     .syncPublisher<CodeGPTUserDetailsNotifier>(CODEGPT_USER_DETAILS_TOPIC)
                     .userDetailsObtained(userDetails)

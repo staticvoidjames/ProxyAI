@@ -28,7 +28,11 @@
       "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/master/src/main/java/ee/carlrobert/llm/client/openai/completion/response/OpenAITextCompletionResponseChoice.java\")",
       "Bash(./gradlew compileKotlin)",
       "Bash(find /Users/wangweijie/Desktop/cs_projects/ProxyAI/src/main/kotlin -type d -name *Mcp* -o -name *mcp*)",
-      "Bash(./gradlew buildPlugin)"
+      "Bash(./gradlew buildPlugin)",
+      "Bash(./gradlew tasks:*)",
+      "Bash(./gradlew runCustomIde)",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew compileKotlin:*)"
     ]
   }
 }

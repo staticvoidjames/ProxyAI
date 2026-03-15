@@ -30,7 +30,6 @@ import ee.carlrobert.codegpt.settings.models.ModelSelection
 import ee.carlrobert.codegpt.settings.service.FeatureType
 import ee.carlrobert.codegpt.settings.service.ModelSelectionService
 import ee.carlrobert.codegpt.settings.service.ServiceType.INCEPTION
-import ee.carlrobert.codegpt.settings.service.ServiceType.PROXYAI
 import ee.carlrobert.codegpt.toolwindow.chat.editor.diff.DiffSyncManager
 import ee.carlrobert.codegpt.toolwindow.chat.editor.factory.ComponentFactory
 import ee.carlrobert.codegpt.toolwindow.chat.editor.factory.ComponentFactory.EXPANDED_KEY
@@ -44,7 +43,6 @@ import ee.carlrobert.codegpt.toolwindow.chat.parser.SearchReplace
 import ee.carlrobert.codegpt.toolwindow.chat.parser.Segment
 import ee.carlrobert.codegpt.ui.OverlayUtil
 import ee.carlrobert.codegpt.util.EditorUtil
-import ee.carlrobert.llm.client.codegpt.request.AutoApplyRequest
 import ee.carlrobert.llm.client.codegpt.response.CodeGPTException
 import java.util.regex.Pattern
 import javax.swing.BorderFactory
@@ -147,7 +145,6 @@ class ResponseEditorPanel(
         CompletionProgressNotifier.update(project, true)
 
         application.executeOnPooledThread {
-            val model = service<ModelSelectionService>().getModelForFeature(FeatureType.AUTO_APPLY)
             val originalCode = EditorUtil.getFileContent(params.destination)
             try {
                 val response = if (modelSelection.provider == INCEPTION) {
@@ -158,9 +155,6 @@ class ResponseEditorPanel(
                         .message
                         .content
                     extractUpdatedCode(responseContent)
-                } else if (modelSelection.provider == PROXYAI) {
-                    val request = AutoApplyRequest(model, originalCode, params.source)
-                    CompletionClientProvider.getCodeGPTClient().applyChanges(request).mergedCode
                 } else {
                     null
                 }

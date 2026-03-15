@@ -30,12 +30,8 @@ import ee.carlrobert.codegpt.settings.service.ModelSelectionService;
 import ee.carlrobert.codegpt.settings.prompts.PersonaPromptDetailsState;
 import ee.carlrobert.codegpt.settings.prompts.PromptsConfigurable;
 import ee.carlrobert.codegpt.settings.prompts.PromptsSettings;
-import ee.carlrobert.codegpt.settings.service.ProviderChangeNotifier;
-import ee.carlrobert.codegpt.settings.service.ServiceType;
-import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTUserDetailsNotifier;
 import ee.carlrobert.codegpt.toolwindow.chat.ui.ToolWindowFooterNotification;
 import ee.carlrobert.codegpt.toolwindow.chat.ui.textarea.AttachImageNotifier;
-import ee.carlrobert.llm.client.codegpt.PricingPlan;
 import java.nio.file.Path;
 import javax.swing.JComponent;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 public class ChatToolWindowPanel extends SimpleToolWindowPanel {
 
   private final ToolWindowFooterNotification imageFileAttachmentNotification;
-  private final ActionLink upgradePlanLink;
   private final ChatToolWindowTabbedPane tabbedPane;
   private final Project project;
 
@@ -54,12 +49,6 @@ public class ChatToolWindowPanel extends SimpleToolWindowPanel {
     this.project = project;
     imageFileAttachmentNotification = new ToolWindowFooterNotification(() ->
         project.putUserData(CodeGPTKeys.IMAGE_ATTACHMENT_FILE_PATH, ""));
-    upgradePlanLink = new ActionLink("Upgrade your plan", event -> {
-      BrowserUtil.browse("https://tryproxy.io/#pricing");
-    });
-    upgradePlanLink.setFont(JBUI.Fonts.smallFont());
-    upgradePlanLink.setExternalLinkIcon();
-    upgradePlanLink.setVisible(false);
 
     var tabPanel = new ChatToolWindowTabPanel(project, getConversation());
     tabbedPane = new ChatToolWindowTabbedPane(parentDisposable);
@@ -85,25 +74,6 @@ public class ChatToolWindowPanel extends SimpleToolWindowPanel {
         (AttachImageNotifier) filePath -> imageFileAttachmentNotification.show(
             Path.of(filePath).getFileName().toString(),
             "File path: " + filePath));
-    messageBusConnection.subscribe(ProviderChangeNotifier.getTOPIC(),
-        (ProviderChangeNotifier) provider -> {
-          if (provider == ServiceType.PROXYAI) {
-            var userDetails = CodeGPTKeys.CODEGPT_USER_DETAILS.get(project);
-            upgradePlanLink.setVisible(
-                userDetails != null && userDetails.getPricingPlan() != PricingPlan.INDIVIDUAL);
-          } else {
-            upgradePlanLink.setVisible(false);
-          }
-        });
-    messageBusConnection.subscribe(CodeGPTUserDetailsNotifier.getCODEGPT_USER_DETAILS_TOPIC(),
-        (CodeGPTUserDetailsNotifier) userDetails -> {
-          if (userDetails != null) {
-            var provider = ModelSelectionService.getInstance()
-                .getServiceForFeature(FeatureType.CHAT);
-            upgradePlanLink.setVisible(provider == ServiceType.PROXYAI
-                && userDetails.getPricingPlan() != PricingPlan.INDIVIDUAL);
-          }
-        });
   }
 
   public ChatToolWindowTabbedPane getChatTabbedPane() {
@@ -127,8 +97,7 @@ public class ChatToolWindowPanel extends SimpleToolWindowPanel {
 
     ApplicationManager.getApplication().invokeLater(() -> {
       setToolbar(new BorderLayoutPanel()
-          .addToLeft(createActionToolbar(project, tabbedPane, onAddNewTab).getComponent())
-          .addToRight(upgradePlanLink));
+          .addToLeft(createActionToolbar(project, tabbedPane, onAddNewTab).getComponent()));
       setContent(new BorderLayoutPanel()
           .addToCenter(tabbedPane)
           .addToBottom(imageFileAttachmentNotification));

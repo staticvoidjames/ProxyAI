@@ -69,43 +69,8 @@ class AgentCreditsToolbarLabel(
 
     private fun updateDisplay() {
         ApplicationManager.getApplication().invokeLater {
-            val provider = ModelSelectionService.getInstance()
-                .getServiceForFeature(FeatureType.AGENT)
-            if (provider != ServiceType.PROXYAI) {
-                isVisible = false
-                return@invokeLater
-            }
-
-            isVisible = true
-            if (!userDetailsRequested && currentUserDetails == null) {
-                userDetailsRequested = true
-                project.getService(CodeGPTService::class.java).syncUserDetailsAsync()
-            }
-            val credits = currentCredits
-            val userDetails = currentUserDetails
-            val userTotal = userDetails?.creditsTotal
-            val userRemaining = if (userTotal != null && userDetails?.creditsUsed != null) {
-                (userTotal - userDetails.creditsUsed).coerceAtLeast(0)
-            } else null
-            val remaining = credits?.remaining ?: userRemaining
-
-            text = if (remaining != null) {
-                "Credits: ${numberFormat.format(remaining)} left"
-            } else {
-                "Credits: --"
-            }
-
-            toolTipText = buildString {
-                append("<html><body>")
-                append("<b>Credits</b><br>")
-                if (remaining != null) {
-                    append("Remaining: ${numberFormat.format(remaining)}<br>")
-                }
-                if (userTotal != null) {
-                    append("Total: ${numberFormat.format(userTotal)}<br>")
-                }
-                append("</body></html>")
-            }
+            // Credits display is no longer supported without ProxyAI
+            isVisible = false
         }
     }
 

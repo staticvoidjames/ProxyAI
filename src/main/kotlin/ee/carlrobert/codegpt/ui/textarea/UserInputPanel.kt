@@ -31,10 +31,10 @@ import ee.carlrobert.codegpt.Icons
 import ee.carlrobert.codegpt.agent.PromptEnhancer
 import ee.carlrobert.codegpt.settings.ProxyAISettingsService
 import ee.carlrobert.codegpt.settings.configuration.ChatMode
-import ee.carlrobert.codegpt.settings.models.ModelRegistry
 import ee.carlrobert.codegpt.settings.service.FeatureType
 import ee.carlrobert.codegpt.settings.service.ModelSelectionService
 import ee.carlrobert.codegpt.settings.service.ServiceType
+import ee.carlrobert.codegpt.settings.models.ModelRegistry
 import ee.carlrobert.codegpt.toolwindow.chat.ui.textarea.ModelComboBoxAction
 import ee.carlrobert.codegpt.toolwindow.chat.ui.textarea.TotalTokensPanel
 import ee.carlrobert.codegpt.ui.IconActionButton
@@ -653,7 +653,6 @@ class UserInputPanel @JvmOverloads constructor(
     }
 
     private fun isImageActionSupported(): Boolean {
-        val currentModel = ModelSelectionService.getInstance().getModelForFeature(featureType)
         val currentService =
             ModelSelectionService.getInstance().getServiceForFeature(featureType)
 
@@ -663,21 +662,8 @@ class UserInputPanel @JvmOverloads constructor(
             ServiceType.GOOGLE,
             ServiceType.OPENAI,
             ServiceType.OLLAMA -> true
-
-            ServiceType.PROXYAI -> isCodeGPTModelSupported(currentModel)
             else -> false
         }
-    }
-
-    private fun isCodeGPTModelSupported(modelCode: String): Boolean {
-        return modelCode in setOf(
-            ModelRegistry.GPT_4_1,
-            ModelRegistry.GPT_4_1_MINI,
-            ModelRegistry.GEMINI_PRO_2_5,
-            ModelRegistry.GEMINI_FLASH_2_5,
-            ModelRegistry.CLAUDE_4_5_SONNET,
-            ModelRegistry.CLAUDE_4_5_SONNET_THINKING
-        )
     }
 
     private fun updatePreferredSizeFromChildren() {

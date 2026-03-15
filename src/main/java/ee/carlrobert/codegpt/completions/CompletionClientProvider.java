@@ -80,11 +80,6 @@ public class CompletionClientProvider {
         .build(getDefaultClientBuilder());
   }
 
-  public static MistralClient getMistralClient() {
-    return new MistralClient(getCredential(CredentialKey.MistralApiKey.INSTANCE),
-        getDefaultClientBuilder());
-  }
-
   public static InceptionClient getInceptionClient() {
     return new InceptionClient.Builder(getCredential(CredentialKey.InceptionApiKey.INSTANCE))
         .build(getDefaultClientBuilder());

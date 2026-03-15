@@ -20,8 +20,8 @@ interface ShortcutsTestMixin {
     fun useCodeGPTService(role: FeatureType = FeatureType.CHAT) {
         setCredential(CodeGptApiKey, "TEST_API_KEY")
         val modelSettings = service<ModelSettings>()
-        modelSettings.setModel(FeatureType.CHAT, "gpt-5-mini", ServiceType.PROXYAI)
-        modelSettings.setModel(FeatureType.CODE_COMPLETION, "mercury-coder", ServiceType.PROXYAI)
+        modelSettings.setModel(FeatureType.CHAT, "gpt-5-mini", ServiceType.OPENAI)
+        modelSettings.setModel(FeatureType.CODE_COMPLETION, "gpt-3.5-turbo-instruct", ServiceType.OPENAI)
         service<CodeGPTServiceSettings>().state.run {
             codeCompletionSettings.codeCompletionsEnabled = true
         }

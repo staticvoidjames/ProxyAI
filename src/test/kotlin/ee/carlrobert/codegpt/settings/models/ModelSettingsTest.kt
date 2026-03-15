@@ -79,80 +79,80 @@ class ModelSettingsTest : IntegrationTest() {
         modelSettings.setModelWithProvider(FeatureType.CHAT, "gpt-4o", ServiceType.OPENAI)
         lastNotification.set(null)
 
-        modelSettings.setModelWithProvider(FeatureType.CHAT, "gpt-4o", ServiceType.PROXYAI)
+        modelSettings.setModelWithProvider(FeatureType.CHAT, "claude-sonnet-4-20250514", ServiceType.ANTHROPIC)
 
         val notification = lastNotification.get()
-        assertThat(notification!!.model).isEqualTo("gpt-4o")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification!!.model).isEqualTo("claude-sonnet-4-20250514")
+        assertThat(notification.serviceType).isEqualTo(ServiceType.ANTHROPIC)
     }
 
     fun `test setModelWithProvider with code completion triggers code model notification`() {
         modelSettings.setModelWithProvider(FeatureType.CODE_COMPLETION, "gpt-3.5-turbo-instruct", ServiceType.OPENAI)
         lastNotification.set(null)
-        
-        modelSettings.setModelWithProvider(FeatureType.CODE_COMPLETION, "qwen-2.5-32b-code", ServiceType.PROXYAI)
+
+        modelSettings.setModelWithProvider(FeatureType.CODE_COMPLETION, "codellama", ServiceType.OLLAMA)
 
         val notification = lastNotification.get()
         assertThat(notification!!.featureType).isEqualTo(FeatureType.CODE_COMPLETION)
-        assertThat(notification.model).isEqualTo("qwen-2.5-32b-code")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification.model).isEqualTo("codellama")
+        assertThat(notification.serviceType).isEqualTo(ServiceType.OLLAMA)
     }
 
     fun `test setModelWithProvider with auto apply triggers auto apply notification`() {
         lastNotification.set(null)
-        
-        modelSettings.setModelWithProvider(FeatureType.AUTO_APPLY, "gpt-4.1", ServiceType.PROXYAI)
+
+        modelSettings.setModelWithProvider(FeatureType.AUTO_APPLY, "gpt-4.1", ServiceType.OPENAI)
 
         val notification = lastNotification.get()
         assertThat(notification!!.featureType).isEqualTo(FeatureType.AUTO_APPLY)
         assertThat(notification.model).isEqualTo("gpt-4.1")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification.serviceType).isEqualTo(ServiceType.OPENAI)
     }
 
     fun `test setModelWithProvider with commit message triggers commit message notification`() {
         lastNotification.set(null)
-        
-        modelSettings.setModelWithProvider(FeatureType.COMMIT_MESSAGE, "deepseek-v3", ServiceType.PROXYAI)
+
+        modelSettings.setModelWithProvider(FeatureType.COMMIT_MESSAGE, "gpt-4o", ServiceType.OPENAI)
 
         val notification = lastNotification.get()
         assertThat(notification!!.featureType).isEqualTo(FeatureType.COMMIT_MESSAGE)
-        assertThat(notification.model).isEqualTo("deepseek-v3")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification.model).isEqualTo("gpt-4o")
+        assertThat(notification.serviceType).isEqualTo(ServiceType.OPENAI)
     }
 
     fun `test setModelWithProvider with edit code triggers edit code notification`() {
         lastNotification.set(null)
-        
-        modelSettings.setModelWithProvider(FeatureType.INLINE_EDIT, "claude-4-5-sonnet", ServiceType.PROXYAI)
+
+        modelSettings.setModelWithProvider(FeatureType.INLINE_EDIT, "claude-4-5-sonnet", ServiceType.ANTHROPIC)
 
         val notification = lastNotification.get()
         assertThat(notification!!.featureType).isEqualTo(FeatureType.INLINE_EDIT)
         assertThat(notification.model).isEqualTo("claude-4-5-sonnet")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification.serviceType).isEqualTo(ServiceType.ANTHROPIC)
     }
 
     fun `test setModelWithProvider with next edit triggers next edit notification`() {
         modelSettings.state.modelSelections.remove("NEXT_EDIT")
         lastNotification.set(null)
-        
-        modelSettings.setModelWithProvider(FeatureType.NEXT_EDIT, "mercury-coder", ServiceType.PROXYAI)
+
+        modelSettings.setModelWithProvider(FeatureType.NEXT_EDIT, "mercury", ServiceType.INCEPTION)
 
         val notification = lastNotification.get()
         assertThat(notification!!.featureType).isEqualTo(FeatureType.NEXT_EDIT)
-        assertThat(notification.model).isEqualTo("mercury-coder")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification.model).isEqualTo("mercury")
+        assertThat(notification.serviceType).isEqualTo(ServiceType.INCEPTION)
     }
 
     fun `test setModelWithProvider with lookup triggers lookup notification`() {
-        modelSettings.setModelWithProvider(FeatureType.LOOKUP, "deepseek-v3", ServiceType.PROXYAI)
+        modelSettings.setModelWithProvider(FeatureType.LOOKUP, "gpt-4o", ServiceType.OPENAI)
         lastNotification.set(null)
-        
-        modelSettings.setModelWithProvider(FeatureType.LOOKUP, "gpt-4.1-mini", ServiceType.PROXYAI)
+
+        modelSettings.setModelWithProvider(FeatureType.LOOKUP, "gpt-4.1-mini", ServiceType.OPENAI)
 
         val notification = lastNotification.get()
         assertThat(notification!!.featureType).isEqualTo(FeatureType.LOOKUP)
         assertThat(notification.model).isEqualTo("gpt-4.1-mini")
-        assertThat(notification.serviceType).isEqualTo(ServiceType.PROXYAI)
+        assertThat(notification.serviceType).isEqualTo(ServiceType.OPENAI)
     }
 
     fun `test setModel delegates to setModelWithProvider`() {

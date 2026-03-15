@@ -25,7 +25,10 @@
       "mcp__zread__get_repo_structure",
       "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/main/src/main/java/ee/carlrobert/llm/client/openai/completion/OpenAITextCompletionEventSourceListener.java\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/master/src/main/java/ee/carlrobert/llm/client/openai/completion/OpenAITextCompletionEventSourceListener.java\")",
-      "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/master/src/main/java/ee/carlrobert/llm/client/openai/completion/response/OpenAITextCompletionResponseChoice.java\")"
+      "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/master/src/main/java/ee/carlrobert/llm/client/openai/completion/response/OpenAITextCompletionResponseChoice.java\")",
+      "Bash(./gradlew compileKotlin)",
+      "Bash(find /Users/wangweijie/Desktop/cs_projects/ProxyAI/src/main/kotlin -type d -name *Mcp* -o -name *mcp*)",
+      "Bash(./gradlew buildPlugin)"
     ]
   }
 }

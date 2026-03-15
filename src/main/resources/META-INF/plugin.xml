@@ -20,8 +20,6 @@
                   class="ee.carlrobert.codegpt.refactorings.RenameCompletionLookupListener"/>
         <listener topic="com.intellij.codeInsight.lookup.LookupManagerListener"
                   class="ee.carlrobert.codegpt.CodeGPTLookupListener"/>
-        <listener topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"
-                  class="ee.carlrobert.codegpt.toolwindow.chat.ChatToolWindowListener"/>
     </projectListeners>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -31,15 +29,6 @@
         <editorFactoryListener implementation="ee.carlrobert.codegpt.CodeGPTEditorFactoryListener"/>
         <applicationConfigurable id="settings.codegpt" parentId="tools" displayName="ProxyAI"
                                  instance="ee.carlrobert.codegpt.settings.GeneralSettingsConfigurable"/>
-
-        <projectConfigurable id="settings.codegpt.agents" parentId="settings.codegpt" displayName="Agent"
-                             instance="ee.carlrobert.codegpt.settings.agents.AgentConfigurable" groupWeight="35"/>
-        <projectConfigurable id="settings.codegpt.subagents" parentId="settings.codegpt.agents" displayName="Subagents"
-                      instance="ee.carlrobert.codegpt.settings.agents.SubagentsConfigurable"/>
-        <projectConfigurable id="settings.codegpt.skills" parentId="settings.codegpt.agents" displayName="Skills"
-                            instance="ee.carlrobert.codegpt.settings.skills.SkillsConfigurable"/>
-        <projectConfigurable id="settings.codegpt.hooks" parentId="settings.codegpt.agents" displayName="Hooks"
-                            instance="ee.carlrobert.codegpt.settings.hooks.HooksConfigurable"/>
 
         <applicationConfigurable id="settings.codegpt.services" parentId="settings.codegpt" displayName="Providers"
                                   instance="ee.carlrobert.codegpt.settings.service.ServiceConfigurable" groupWeight="30"/>
@@ -62,8 +51,6 @@
         <applicationConfigurable id="settings.codegpt.services.llama_cpp" parentId="settings.codegpt.services" displayName="LLaMA C/C++ (Offline)"
                                   instance="ee.carlrobert.codegpt.settings.service.LlamaServiceConfigurable" groupWeight="0"/>
 
-        <applicationConfigurable id="settings.codegpt.mcp" parentId="settings.codegpt" displayName="MCP"
-                                  instance="ee.carlrobert.codegpt.settings.mcp.McpConfigurable" groupWeight="25"/>
         <applicationConfigurable id="settings.codegpt.models" parentId="settings.codegpt" bundle="messages.codegpt" key="settings.models.displayName"
                                         instance="ee.carlrobert.codegpt.settings.models.ModelSettingsConfigurable" groupWeight="20"/>
         <applicationConfigurable id="settings.codegpt.prompts" parentId="settings.codegpt" displayName="Prompts"
@@ -72,12 +59,8 @@
                                   instance="ee.carlrobert.codegpt.settings.configuration.ConfigurationConfigurable" groupWeight="10"/>
         <applicationConfigurable id="settings.codegpt.advanced" parentId="settings.codegpt" displayName="Advanced Settings"
                                   instance="ee.carlrobert.codegpt.settings.advanced.AdvancedSettingsConfigurable" groupWeight="5"/>
-        <applicationConfigurable id="tools.preferences.codegpt.telemetry" parentId="settings.codegpt" displayName="Telemetry"
-                                  instance="ee.carlrobert.codegpt.telemetry.ui.preferences.TelemetryConfigurable" groupWeight="0"/>
 
         <actionPromoter implementation="ee.carlrobert.codegpt.actions.InlayActionPromoter"/>
-        <applicationService
-                serviceImplementation="ee.carlrobert.codegpt.telemetry.core.service.TelemetryServiceFactory"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.GeneralSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.service.anthropic.AnthropicSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.service.openai.OpenAISettings"/>
@@ -90,17 +73,13 @@
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.advanced.AdvancedSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.conversations.ConversationsState"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.codecompletions.psi.CompletionContextService"/>
-        <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.mcp.McpSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.services.llama.ServerLogsManager"/>
         <projectService serviceImplementation="ee.carlrobert.codegpt.services.ExecutableRunnerService"/>
         <inline.completion.provider
                 id="CodeGPTInlineCompletionProvider"
                 implementation="ee.carlrobert.codegpt.codecompletions.DebouncedCodeCompletionProvider"/>
-        <toolWindow id="ProxyAI" icon="ee.carlrobert.codegpt.Icons.DefaultSmall" anchor="right"
-                    factoryClass="ee.carlrobert.codegpt.toolwindow.ProxyAIToolWindowFactory"/>
         <notificationGroup id="proxyai.notification.group" displayType="BALLOON" key="notification.group.name"/>
         <notificationGroup id="proxyai.notification.sticky.group" displayType="STICKY_BALLOON" key="notification.group.sticky.name"/>
-        <notificationGroup id="ProxyAI.MCP.Notifications" displayType="BALLOON" key="notification.group.mcp.name"/>
         <statusBarWidgetFactory order="first" id="ee.carlrobert.codegpt.statusbar.widget"
                                 implementation="ee.carlrobert.codegpt.statusbar.CodeGPTStatusBarWidgetFactory"/>
         <nameSuggestionProvider implementation="ee.carlrobert.codegpt.refactorings.DefaultNameSuggestionProvider"/>

@@ -121,6 +121,15 @@ class CustomServicesSettings :
         val modelSelection = service<ModelSelectionService>()
         val featureSelection = modelSelection.getModelSelectionForFeature(featureType)
 
+        // DEBUG LOG
+        println("=== DEBUG customServiceStateForFeatureType ===")
+        println("featureType: $featureType")
+        println("featureSelection.provider: ${featureSelection.provider}")
+        println("featureSelection.model: ${featureSelection.model}")
+        println("featureSelection.id: ${featureSelection.id}")
+        println("Available services: ${this.state.services.map { Pair(it.id, it.name) }}")
+        println("=============================================")
+
         if (featureSelection.provider != ServiceType.CUSTOM_OPENAI)
             throw IllegalStateException(
                 "Current selected ServiceType (${featureSelection}) is not of type 'CUSTOM_OPENAI'. " +

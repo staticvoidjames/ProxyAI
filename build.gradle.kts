@@ -70,7 +70,6 @@ dependencies {
         testFramework(TestFrameworkType.JUnit5)
     }
 
-    implementation(project(":proxyai-telemetry"))
     implementation(project(":proxyai-treesitter"))
 
     implementation(platform(libs.okhttp.bom))
@@ -204,6 +203,8 @@ tasks {
 
     runIde {
         environment("ENVIRONMENT", "LOCAL")
+        // Enable debug support - attach debugger to localhost:5005 (suspend=n means it won't wait for debugger)
+        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005")
     }
 
     buildPlugin {

@@ -4,7 +4,6 @@ import com.intellij.icons.AllIcons.Actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Editor;
 import ee.carlrobert.codegpt.CodeGPTBundle;
-import ee.carlrobert.codegpt.actions.ActionType;
 import ee.carlrobert.codegpt.actions.TrackableAction;
 import ee.carlrobert.codegpt.ui.OverlayUtil;
 import java.awt.Toolkit;
@@ -20,8 +19,7 @@ public class CopyAction extends TrackableAction {
     super(
         CodeGPTBundle.get("shared.copyCode"),
         CodeGPTBundle.get("shared.copyToClipboard"),
-        Actions.Copy,
-        ActionType.COPY_CODE);
+        Actions.Copy);
     this.toolwindowEditor = toolwindowEditor;
   }
 

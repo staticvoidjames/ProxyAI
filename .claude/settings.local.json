@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p ~/Downloads/JavaAlgorithms/src/main/java/com/algorithms)",
+      "Bash(mkdir -p ~/Downloads/JavaAlgorithms/src/test/java/com/algorithms)",
+      "mcp__web-search-prime__web_search_prime",
+      "mcp__web-reader__webReader",
+      "Bash(curl -s -X POST \"https://open.bigmodel.cn/api/coding/paas/v4/chat/completions\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer 4d59f23c055ecd475ce5d9dbb43506ad.ExGE3gOLDSttRAcG\" -d '{:*)",
+      "Bash(unzip -l ~/.gradle/caches/modules-2/files-2.1/ee.carlrobert/llm-client/0.8.58/eed51f7240b05403396cc35acd72b069d419bb7c/llm-client-0.8.58-sources.jar)",
+      "Bash(unzip -p ~/.gradle/caches/modules-2/files-2.1/ee.carlrobert/llm-client/0.8.58/eed51f7240b05403396cc35acd72b069d419bb7c/llm-client-0.8.58-sources.jar ee/carlrobert/llm/client/openai/completion/OpenAIChatCompletionEventSourceListener.java)",
+      "Bash(unzip -p ~/.gradle/caches/modules-2/files-2.1/ee.carlrobert/llm-client/0.8.58/eed51f7240b05403396cc35acd72b069d419bb7c/llm-client-0.8.58-sources.jar ee/carlrobert/llm/client/openai/completion/ErrorDetails.java ee/carlrobert/llm/client/openai/completion/ApiResponseError.java)",
+      "mcp__zai-mcp-server__analyze_image",
+      "Bash(find /Users/wangweijie/Desktop/cs_projects/ProxyAI -name *.jar)",
+      "Bash(unzip -p ~/.gradle/caches/modules-2/files-2.1/ee.carlrobert/llm-client/0.8.58/eed51f7240b05403396cc35acd72b069d419bb7c/llm-client-0.8.58-sources.jar ee/carlrobert/llm/client/openai/completion/response/OpenAIChatCompletionResponseChoiceDelta.java)",
+      "Bash(./gradlew runIde)",
+      "Bash(kill 44904)",
+      "Bash(pkill -f ideaIC-2025.1.1)",
+      "mcp__zai-mcp-server__diagnose_error_screenshot",
+      "Bash(ls -la /Users/wangweijie/Desktop/cs_projects/ProxyAI/build/idea-sandbox/IC-2025.1.1/plugins/ProxyAI/lib/*.jar)",
+      "Bash(find ~/Library -path *idea-sandbox* -name *.xml)",
+      "Bash(find /Users/wangweijie/Desktop/cs_projects/ProxyAI/build/idea-sandbox -name *.xml)",
+      "Bash(pkill -f \"idea\")",
+      "Bash(./gradlew --stop)",
+      "mcp__zread__search_doc",
+      "mcp__zread__get_repo_structure",
+      "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/main/src/main/java/ee/carlrobert/llm/client/openai/completion/OpenAITextCompletionEventSourceListener.java\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/master/src/main/java/ee/carlrobert/llm/client/openai/completion/OpenAITextCompletionEventSourceListener.java\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/carlrobertoh/llm-client/master/src/main/java/ee/carlrobert/llm/client/openai/completion/response/OpenAITextCompletionResponseChoice.java\")"
+    ]
+  }
+}

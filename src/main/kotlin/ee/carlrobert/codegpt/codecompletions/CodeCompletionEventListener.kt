@@ -48,10 +48,21 @@ class CodeCompletionEventListener(
             return
         }
 
+        // DEBUG LOG
+        println("=== DEBUG onMessage (Response Chunk) ===")
+        println("message: $message")
+        println("========================================")
+
         messageBuilder.append(message)
     }
 
     override fun onComplete(result: StringBuilder) {
+        // DEBUG LOG
+        println("=== DEBUG onComplete (Final Result) ===")
+        println("result: $result")
+        println("result.isEmpty: ${result.isEmpty()}")
+        println("=======================================")
+
         try {
             CodeGPTKeys.REMAINING_CODE_COMPLETION.set(editor, null)
             CodeGPTKeys.REMAINING_NEXT_EDITS.set(editor, null)

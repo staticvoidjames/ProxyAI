@@ -12,7 +12,6 @@ import ee.carlrobert.codegpt.conversations.Conversation;
 import ee.carlrobert.codegpt.conversations.ConversationService;
 import ee.carlrobert.codegpt.conversations.message.Message;
 import ee.carlrobert.codegpt.events.CodeGPTEvent;
-import ee.carlrobert.codegpt.telemetry.TelemetryAction;
 import ee.carlrobert.codegpt.toolwindow.chat.ui.ChatMessageResponseBody;
 import ee.carlrobert.codegpt.toolwindow.chat.ui.textarea.TotalTokensPanel;
 import ee.carlrobert.codegpt.toolwindow.ui.ResponseMessagePanel;
@@ -119,10 +118,6 @@ abstract class ToolWindowCompletionResponseEventListener implements
     ApplicationManager.getApplication().invokeLater(() -> {
       var answer = OverlayUtil.showTokenLimitExceededDialog();
       if (answer == OK) {
-        TelemetryAction.IDE_ACTION.createActionMessage()
-            .property("action", "DISCARD_TOKEN_LIMIT")
-            .send();
-
         ConversationService.getInstance().discardTokenLimits(conversation);
         handleTokensExceededPolicyAccepted();
       } else {

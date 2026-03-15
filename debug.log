@@ -1,0 +1,46 @@
+Calculating task graph as configuration cache cannot be reused because file 'build.gradle.kts' has changed.
+> Task :buildSrc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :buildSrc:generateExternalPluginSpecBuilders UP-TO-DATE
+> Task :buildSrc:extractPrecompiledScriptPluginPlugins UP-TO-DATE
+> Task :buildSrc:compilePluginsBlocks UP-TO-DATE
+> Task :buildSrc:generatePrecompiledScriptPluginAccessors UP-TO-DATE
+> Task :buildSrc:generateScriptPluginAdapters UP-TO-DATE
+> Task :buildSrc:compileKotlin UP-TO-DATE
+> Task :buildSrc:compileJava NO-SOURCE
+> Task :buildSrc:compileGroovy NO-SOURCE
+> Task :buildSrc:pluginDescriptors UP-TO-DATE
+> Task :buildSrc:processResources UP-TO-DATE
+> Task :buildSrc:classes UP-TO-DATE
+> Task :buildSrc:jar UP-TO-DATE
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :proxyai-treesitter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :proxyai-treesitter:processResources NO-SOURCE
+> Task :proxyai-treesitter:initializeIntellijPlatformPlugin
+> Task :extractProto UP-TO-DATE
+> Task :initializeIntellijPlatformPlugin
+> Task :proxyai-treesitter:compileKotlin NO-SOURCE
+> Task :proxyai-treesitter:generateManifest UP-TO-DATE
+> Task :generateManifest UP-TO-DATE
+> Task :proxyai-treesitter:compileJava UP-TO-DATE
+> Task :proxyai-treesitter:classes UP-TO-DATE
+> Task :proxyai-treesitter:instrumentCode UP-TO-DATE
+> Task :patchPluginXml UP-TO-DATE
+> Task :proxyai-treesitter:jar UP-TO-DATE
+> Task :proxyai-treesitter:instrumentedJar UP-TO-DATE
+> Task :proxyai-treesitter:composedJar UP-TO-DATE
+> Task :extractIncludeProto UP-TO-DATE
+> Task :generateProto UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :compileKotlin UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :instrumentCode UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :instrumentedJar UP-TO-DATE
+> Task :composedJar UP-TO-DATE
+> Task :updateSubmodules
+> Task :prepareSandbox UP-TO-DATE
+
+> Task :runIde
+[0.008s][warning][cds] Archived non-system classes are disabled because the java.system.class.loader property is specified (value = "com.intellij.util.lang.PathClassLoader"). To use archived non-system classes, this property must not be set
+Listening for transport dt_socket at address: 5005

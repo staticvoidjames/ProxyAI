@@ -648,12 +648,17 @@ class ModelRegistry {
                 val serviceId = service.id ?: return@mapNotNull null
                 val serviceName = service.name ?: ""
                 val modelFromBody = service.codeCompletionSettings.body["model"]
-                val modelName = (modelFromBody as? String)
-                val displayName = if (!modelName.isNullOrEmpty()) {
+                val modelName = (modelFromBody as? String) ?: ""
+                val displayName = if (modelName.isNotEmpty()) {
                     if (modelName.length > 20) "$serviceName (...${modelName.takeLast(20)})" else "$serviceName ($modelName)"
                 } else serviceName
 
-                ModelSelection(ServiceType.CUSTOM_OPENAI, serviceId, displayName)
+                ModelSelection(
+                    id = serviceId,
+                    provider = ServiceType.CUSTOM_OPENAI,
+                    model = modelName,
+                    displayName = displayName
+                )
             }
         } catch (e: Exception) {
             logger.error("Failed to get Custom OpenAI code models", e)

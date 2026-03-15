@@ -11,10 +11,8 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.testFramework.LightVirtualFile;
-import ee.carlrobert.codegpt.actions.ActionType;
 import ee.carlrobert.codegpt.actions.editor.EditorActionsUtil;
 import ee.carlrobert.codegpt.conversations.ConversationsState;
-import ee.carlrobert.codegpt.telemetry.TelemetryAction;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -36,29 +34,23 @@ public class OpenInEditorAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    try {
-      var project = e.getProject();
-      var currentConversation = ConversationsState.getCurrentConversation();
-      if (project != null && currentConversation != null) {
-        var dateTimeStamp = currentConversation.getUpdatedOn()
-            .format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-        var fileName = format("proxyai_conversation_%s.md", dateTimeStamp);
-        var fileContent = currentConversation
-            .getMessages()
-            .stream()
-            .map(it -> format("### User:%n%s%n### CodeGPT:%n%s%n", it.getPrompt(),
-                it.getResponse()))
-            .collect(Collectors.joining());
-        VirtualFile file = new LightVirtualFile(fileName, fileContent);
-        FileEditorManager.getInstance(project).openFile(file, true);
-        var toolWindow = requireNonNull(
-            ToolWindowManager.getInstance(project).getToolWindow("ProxyAI"));
-        toolWindow.hide();
-      }
-    } finally {
-      TelemetryAction.IDE_ACTION.createActionMessage()
-          .property("action", ActionType.OPEN_CONVERSATION_IN_EDITOR.name())
-          .send();
+    var project = e.getProject();
+    var currentConversation = ConversationsState.getCurrentConversation();
+    if (project != null && currentConversation != null) {
+      var dateTimeStamp = currentConversation.getUpdatedOn()
+          .format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+      var fileName = format("proxyai_conversation_%s.md", dateTimeStamp);
+      var fileContent = currentConversation
+          .getMessages()
+          .stream()
+          .map(it -> format("### User:%n%s%n### CodeGPT:%n%s%n", it.getPrompt(),
+              it.getResponse()))
+          .collect(Collectors.joining());
+      VirtualFile file = new LightVirtualFile(fileName, fileContent);
+      FileEditorManager.getInstance(project).openFile(file, true);
+      var toolWindow = requireNonNull(
+          ToolWindowManager.getInstance(project).getToolWindow("ProxyAI"));
+      toolWindow.hide();
     }
   }
 

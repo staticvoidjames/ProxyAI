@@ -111,20 +111,40 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
     override fun isEnabled(event: InlineCompletionEvent): Boolean {
         val selectedService =
             service<ModelSelectionService>().getServiceForFeature(FeatureType.CODE_COMPLETION)
-        val codeCompletionsEnabled = when (selectedService) {
-            ServiceType.PROXYAI -> service<CodeGPTServiceSettings>().state.codeCompletionSettings.codeCompletionsEnabled
-            ServiceType.OPENAI -> OpenAISettings.getCurrentState().isCodeCompletionsEnabled
-            ServiceType.CUSTOM_OPENAI -> service<CustomServicesSettings>()
-                .customServiceStateForFeatureType(FeatureType.CODE_COMPLETION)
-                .codeCompletionSettings.codeCompletionsEnabled
 
-            ServiceType.LLAMA_CPP -> LlamaSettings.isCodeCompletionsPossible()
-            ServiceType.OLLAMA -> service<OllamaSettings>().state.codeCompletionsEnabled
-            ServiceType.MISTRAL -> MistralSettings.getCurrentState().isCodeCompletionsEnabled
-            ServiceType.INCEPTION -> service<InceptionSettings>().state.codeCompletionsEnabled
-            ServiceType.ANTHROPIC,
-            ServiceType.GOOGLE -> false
+        // DEBUG LOG
+        println("=== DEBUG isEnabled ===")
+        println("event: $event")
+        println("selectedService: $selectedService")
+
+        val codeCompletionsEnabled = try {
+            when (selectedService) {
+                ServiceType.PROXYAI -> service<CodeGPTServiceSettings>().state.codeCompletionSettings.codeCompletionsEnabled
+                ServiceType.OPENAI -> OpenAISettings.getCurrentState().isCodeCompletionsEnabled
+                ServiceType.CUSTOM_OPENAI -> {
+                    println("DEBUG: Calling customServiceStateForFeatureType...")
+                    val result = service<CustomServicesSettings>()
+                        .customServiceStateForFeatureType(FeatureType.CODE_COMPLETION)
+                        .codeCompletionSettings.codeCompletionsEnabled
+                    println("DEBUG: customServiceStateForFeatureType returned: $result")
+                    result
+                }
+
+                ServiceType.LLAMA_CPP -> LlamaSettings.isCodeCompletionsPossible()
+                ServiceType.OLLAMA -> service<OllamaSettings>().state.codeCompletionsEnabled
+                ServiceType.MISTRAL -> MistralSettings.getCurrentState().isCodeCompletionsEnabled
+                ServiceType.INCEPTION -> service<InceptionSettings>().state.codeCompletionsEnabled
+                ServiceType.ANTHROPIC,
+                ServiceType.GOOGLE -> false
+            }
+        } catch (e: Exception) {
+            println("DEBUG ERROR in isEnabled: ${e.message}")
+            e.printStackTrace()
+            return false
         }
+
+        println("codeCompletionsEnabled: $codeCompletionsEnabled")
+        println("========================")
 
         if (!codeCompletionsEnabled) {
             return false

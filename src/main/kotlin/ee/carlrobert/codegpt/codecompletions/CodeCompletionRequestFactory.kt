@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets
 
 object CodeCompletionRequestFactory {
 
-    private const val MAX_TOKENS = 128
+    private const val MAX_TOKENS = 64
 
     @JvmStatic
     fun buildOpenAIRequest(details: InfillRequest): OpenAITextCompletionRequest {
@@ -78,27 +78,37 @@ object CodeCompletionRequestFactory {
         credential: String?
     ): Request {
         val requestBuilder = Request.Builder().url(url)
-        
+
+        // DEBUG LOG
+        println("=== DEBUG buildChatBasedFIMHttpRequest (Header Processing) ===")
+        println("credential is null: ${credential == null}")
+        println("credential value: ${credential?.take(10)}...")
+        println("==============================================================")
+
+        val actualHeaders = mutableMapOf<String, String>()
         for (entry in headers.entries) {
             var value = entry.value
+            println("Processing header: ${entry.key} = $value")
             if (credential != null && value.contains("\$CUSTOM_SERVICE_API_KEY")) {
                 value = value.replace("\$CUSTOM_SERVICE_API_KEY", credential)
+                println("Replaced API key in header -> ${entry.key} = Bearer ${value.take(20)}...")
             }
             requestBuilder.addHeader(entry.key, value)
+            actualHeaders[entry.key] = value
         }
-        
+
         // Create chat completion messages using the improved prompt template
         val systemMessage = mapOf<String, String>(
             "role" to "system",
             "content" to "You are a code completion assistant. Complete the code between the given prefix and suffix. " +
                     "Return only the missing code that should be inserted, without any formatting, explanations, or markdown."
         )
-        
+
         val userMessage = mapOf<String, String>(
             "role" to "user",
             "content" to "<PREFIX>\n${details.prefix}\n</PREFIX>\n\n<SUFFIX>\n${details.suffix}\n</SUFFIX>\n\nComplete:"
         )
-        
+
         // Transform the custom body configuration, excluding completion-specific parameters
         val transformedBody = body.entries.mapNotNull { (key, value) ->
             when (key.lowercase()) {
@@ -108,19 +118,27 @@ object CodeCompletionRequestFactory {
                 else -> key to transformValue(value, InfillPromptTemplate.CHAT_COMPLETION, details)
             }
         }.toMap().toMutableMap()
-        
+
         // Ensure we have messages for chat completion
         if (!transformedBody.containsKey("messages")) {
             transformedBody["messages"] = listOf(systemMessage, userMessage)
         }
 
         try {
-            val jsonBody = ObjectMapper()
+            val jsonBytes = ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(transformedBody)
                 .toByteArray(StandardCharsets.UTF_8)
-                .toRequestBody("application/json".toMediaType())
-            return requestBuilder.post(jsonBody).build()
+
+            // DEBUG LOG
+            println("=== DEBUG buildChatBasedFIMHttpRequest ===")
+            println("URL: $url")
+            println("Headers (actual): $actualHeaders")
+            println("Body: ${String(jsonBytes, StandardCharsets.UTF_8)}")
+            println("==========================================")
+
+            val requestBody = jsonBytes.toRequestBody("application/json".toMediaType())
+            return requestBuilder.post(requestBody).build()
         } catch (e: JsonProcessingException) {
             throw RuntimeException(e)
         }
@@ -184,9 +202,18 @@ object CodeCompletionRequestFactory {
         }
 
         try {
-            val requestBody = ObjectMapper()
+            val jsonBody = ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(transformedBody)
+
+            // DEBUG LOG
+            println("=== DEBUG buildCustomRequest ===")
+            println("URL: $url")
+            println("infillTemplate: $infillTemplate")
+            println("Body: $jsonBody")
+            println("=================================")
+
+            val requestBody = jsonBody
                 .toByteArray(StandardCharsets.UTF_8)
                 .toRequestBody("application/json".toMediaType())
             return requestBuilder.post(requestBody).build()

@@ -59,8 +59,15 @@ class CodeCompletionService {
         infillRequest: InfillRequest,
         eventListener: CompletionEventListener<String>
     ): EventSource {
-        return when (val selectedService =
-            ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CODE_COMPLETION)) {
+        // DEBUG LOG
+        val selectedService = ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CODE_COMPLETION)
+        println("=== DEBUG getCodeCompletionAsync ===")
+        println("selectedService: $selectedService")
+        println("infillRequest.prefix: ${infillRequest.prefix.take(50)}...")
+        println("infillRequest.suffix: ${infillRequest.suffix.take(50)}...")
+        println("=====================================")
+
+        return when (selectedService) {
             OPENAI -> {
                 CompletionClientProvider.getOpenAIClient()
                     .getCompletionAsync(buildOpenAIRequest(infillRequest), eventListener)
@@ -72,6 +79,14 @@ class CodeCompletionService {
                 val customSettings = activeService.codeCompletionSettings
                 val isChatBasedFIM =
                     customSettings.infillTemplate == InfillPromptTemplate.CHAT_COMPLETION
+
+                // DEBUG LOG
+                println("=== DEBUG CUSTOM_OPENAI Code Completion ===")
+                println("infillTemplate: ${customSettings.infillTemplate}")
+                println("isChatBasedFIM: $isChatBasedFIM")
+                println("parseResponseAsChatCompletions: ${customSettings.parseResponseAsChatCompletions}")
+                println("============================================")
+
                 if (isChatBasedFIM) {
                     val credential = getCredential(
                         CredentialKey.CustomServiceApiKeyById(

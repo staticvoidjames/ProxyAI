@@ -31,17 +31,34 @@ class ModelSelectionService {
             val modelSettings = service<ModelSettings>()
             val modelDetailsState = modelSettings.state.getModelSelection(featureType)
 
+            // DEBUG LOG
+            println("=== DEBUG getModelSelectionForFeature ===")
+            println("featureType: $featureType")
+            println("modelDetailsState.model: ${modelDetailsState?.model}")
+            println("modelDetailsState.provider: ${modelDetailsState?.provider}")
+
             if (modelDetailsState != null && modelDetailsState.model != null && modelDetailsState.provider != null) {
+                val allModels = service<ModelRegistry>().getAllModelsForFeature(featureType)
+                println("Available models for $featureType:")
+                allModels.filter { it.provider == modelDetailsState.provider }.forEach {
+                    println("  - id: ${it.id}, model: ${it.model}, displayName: ${it.displayName}")
+                }
+
                 val foundModel =
                     service<ModelRegistry>().findModel(
                         modelDetailsState.provider!!,
                         modelDetailsState.model!!
                     )
+                println("foundModel: $foundModel")
+                println("==========================================")
+
                 if (foundModel != null) {
                     return foundModel
                 }
             }
 
+            println("Using default model for $featureType")
+            println("==========================================")
             service<ModelRegistry>().getDefaultModelForFeature(featureType, pricingPlan)
         } catch (exception: Exception) {
             logger.warn(

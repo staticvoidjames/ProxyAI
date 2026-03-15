@@ -27,7 +27,6 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 import ee.carlrobert.codegpt.CodeGPTBundle;
 import ee.carlrobert.codegpt.Icons;
-import ee.carlrobert.codegpt.actions.ActionType;
 import ee.carlrobert.codegpt.events.AnalysisCompletedEventDetails;
 import ee.carlrobert.codegpt.events.AnalysisFailedEventDetails;
 import ee.carlrobert.codegpt.events.CodeGPTEvent;
@@ -37,7 +36,6 @@ import ee.carlrobert.codegpt.settings.GeneralSettingsConfigurable;
 import ee.carlrobert.codegpt.settings.service.FeatureType;
 import ee.carlrobert.codegpt.settings.service.ModelSelectionService;
 import ee.carlrobert.codegpt.settings.service.ServiceType;
-import ee.carlrobert.codegpt.telemetry.TelemetryAction;
 import ee.carlrobert.codegpt.toolwindow.chat.editor.ResponseEditorPanel;
 import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.CopyAction;
 import ee.carlrobert.codegpt.toolwindow.chat.editor.header.DefaultHeaderPanel;
@@ -188,9 +186,6 @@ public class ChatMessageResponseBody extends JPanel {
       if (e.getEventType() == ACTIVATED) {
         ShowSettingsUtil.getInstance()
             .showSettingsDialog(project, GeneralSettingsConfigurable.class);
-        TelemetryAction.IDE_ACTION.createActionMessage()
-            .property("action", ActionType.CHANGE_PROVIDER.name())
-            .send();
       }
     });
   }

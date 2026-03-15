@@ -5,7 +5,6 @@ import ee.carlrobert.codegpt.codecompletions.CompletionProgressNotifier;
 import ee.carlrobert.codegpt.mcp.McpToolCallEventListener;
 import ee.carlrobert.codegpt.settings.service.FeatureType;
 import ee.carlrobert.codegpt.settings.service.ModelSelectionService;
-import ee.carlrobert.codegpt.telemetry.TelemetryAction;
 import ee.carlrobert.codegpt.toolwindow.chat.ChatToolWindowTabPanel;
 import ee.carlrobert.codegpt.toolwindow.ui.ResponseMessagePanel;
 import ee.carlrobert.codegpt.toolwindow.ui.mcp.McpApprovalPanel;
@@ -143,11 +142,6 @@ public class ToolwindowChatCompletionRequestHandler {
   }
 
   private void sendInfo(ChatCompletionParameters callParameters) {
-    var service = ModelSelectionService.getInstance()
-        .getServiceForFeature(FeatureType.CHAT);
-    TelemetryAction.COMPLETION.createActionMessage()
-        .property("conversationId", callParameters.getConversation().getId().toString())
-        .property("service", service.getCode().toLowerCase())
-        .send();
+    // telemetry removed
   }
 }

@@ -8,7 +8,6 @@ import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.layout.ComponentPredicate
 import com.intellij.util.ui.components.BorderLayoutPanel
-import ee.carlrobert.codegpt.settings.prompts.CommitMessageTemplate
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_AUTO_APPLY_PROMPT
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_INLINE_EDIT_PROMPT
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_FIX_COMPILE_ERRORS_PROMPT
@@ -52,12 +51,12 @@ class CoreActionsDetailsPanel : PromptDetailsPanel {
                         "Template used for resolving compile errors in the code."
                     )
 
-                    "GENERATE_COMMIT_MESSAGE" -> CoreActionEditorPanel(
-                        details,
-                        DEFAULT_GENERATE_COMMIT_MESSAGE_PROMPT,
-                        CommitMessageTemplate.getHtmlDescription(),
-                        listOf("{BRANCH_NAME}", "{DATE_ISO_8601}")
-                    )
+                    // "GENERATE_COMMIT_MESSAGE" -> CoreActionEditorPanel(
+                    //     details,
+                    //     DEFAULT_GENERATE_COMMIT_MESSAGE_PROMPT,
+                    //     CommitMessageTemplate.getHtmlDescription(),
+                    //     listOf("{BRANCH_NAME}", "{DATE_ISO_8601}")
+                    // )
 
                     "GENERATE_NAME_LOOKUPS" -> CoreActionEditorPanel(
                         details,

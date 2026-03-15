@@ -32,7 +32,9 @@
       "Bash(./gradlew tasks:*)",
       "Bash(./gradlew runCustomIde)",
       "Bash(./gradlew build:*)",
-      "Bash(./gradlew compileKotlin:*)"
+      "Bash(./gradlew compileKotlin:*)",
+      "mcp__zread__read_file",
+      "Bash(./gradlew compile:*)"
     ]
   }
 }

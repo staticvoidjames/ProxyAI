@@ -31,9 +31,9 @@ class ModelSettings : SimplePersistentStateComponent<ModelSettingsState>(ModelSe
         FeatureType.AUTO_APPLY to PublisherMethod { publisher, model, serviceType ->
             publisher.autoApplyModelChanged(model, serviceType)
         },
-        FeatureType.COMMIT_MESSAGE to PublisherMethod { publisher, model, serviceType ->
-            publisher.commitMessageModelChanged(model, serviceType)
-        },
+        // FeatureType.COMMIT_MESSAGE to PublisherMethod { publisher, model, serviceType ->
+        //     publisher.commitMessageModelChanged(model, serviceType)
+        // },
         FeatureType.INLINE_EDIT to PublisherMethod { publisher, model, serviceType ->
             publisher.inlineEditModelChanged(model, serviceType)
         },

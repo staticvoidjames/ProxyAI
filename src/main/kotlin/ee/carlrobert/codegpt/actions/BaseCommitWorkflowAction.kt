@@ -1,13 +1,9 @@
 package ee.carlrobert.codegpt.actions
 
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.runInEdt
-import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
 import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
@@ -18,17 +14,10 @@ import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.vcs.commit.CommitWorkflowUi
 import ee.carlrobert.codegpt.EncodingManager
-import ee.carlrobert.codegpt.codecompletions.CompletionProgressNotifier
-import ee.carlrobert.codegpt.completions.CompletionRequestService
-import ee.carlrobert.codegpt.settings.service.FeatureType
-import ee.carlrobert.codegpt.util.ThinkingOutputParser
 import ee.carlrobert.codegpt.ui.OverlayUtil
 import ee.carlrobert.codegpt.util.CommitWorkflowChanges
 import ee.carlrobert.codegpt.util.GitUtil.getProjectRepository
-import ee.carlrobert.llm.client.openai.completion.ErrorDetails
-import ee.carlrobert.llm.completion.CompletionEventListener
 import git4idea.repo.GitRepository
-import okhttp3.sse.EventSource
 import java.io.StringWriter
 import java.nio.file.Path
 
@@ -48,10 +37,8 @@ abstract class BaseCommitWorkflowAction : DumbAwareAction() {
 
     override fun update(event: AnActionEvent) {
         val commitWorkflowUi = event.getData(VcsDataKeys.COMMIT_WORKFLOW_UI) ?: return
-        val requestAllowed = CompletionRequestService.isRequestAllowed(FeatureType.COMMIT_MESSAGE)
         runInEdt {
-            event.presentation.isEnabled =
-                requestAllowed && CommitWorkflowChanges(commitWorkflowUi).isFilesSelected
+            event.presentation.isEnabled = CommitWorkflowChanges(commitWorkflowUi).isFilesSelected
             event.presentation.text = getTitle(commitWorkflowUi)
         }
     }
@@ -119,53 +106,5 @@ abstract class BaseCommitWorkflowAction : DumbAwareAction() {
         }.toString()
     }.getOrElse { e ->
         throw RuntimeException("Unable to create git diff", e)
-    }
-}
-
-class CommitMessageEventListener(
-    private val project: Project,
-    private val commitWorkflowUi: CommitWorkflowUi
-) : CompletionEventListener<String> {
-
-    private val messageBuilder = StringBuilder()
-    private val thinkingOutputParser = ThinkingOutputParser()
-
-    override fun onMessage(message: String, eventSource: EventSource) {
-        val processedChunk = thinkingOutputParser.processChunk(message)
-        if (processedChunk.isNotEmpty() && thinkingOutputParser.isFinished) {
-            messageBuilder.append(message)
-            updateCommitMessage(messageBuilder.toString())
-        }
-    }
-
-    override fun onComplete(result: StringBuilder) {
-        if (messageBuilder.isEmpty()) {
-            updateCommitMessage(result.toString())
-        }
-        stopLoading()
-    }
-
-    override fun onError(error: ErrorDetails, ex: Throwable) {
-        Notifications.Bus.notify(
-            Notification(
-                "proxyai.notification.group",
-                "ProxyAI",
-                error.message,
-                NotificationType.ERROR
-            )
-        )
-        stopLoading()
-    }
-
-    private fun stopLoading() {
-        CompletionProgressNotifier.update(project, false)
-    }
-
-    private fun updateCommitMessage(message: String?) {
-        ApplicationManager.getApplication().invokeLater {
-            WriteCommandAction.runWriteCommandAction(project) {
-                commitWorkflowUi.commitMessageUi.setText(message)
-            }
-        }
     }
 }

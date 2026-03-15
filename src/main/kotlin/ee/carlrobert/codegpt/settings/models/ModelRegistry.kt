@@ -68,7 +68,6 @@ class ModelRegistry {
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -79,7 +78,6 @@ class ModelRegistry {
                 FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -90,7 +88,6 @@ class ModelRegistry {
                 FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -102,7 +99,6 @@ class ModelRegistry {
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -111,7 +107,7 @@ class ModelRegistry {
             ServiceType.LLAMA_CPP,
             setOf(
                 FeatureType.CHAT, FeatureType.CODE_COMPLETION, FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE, FeatureType.INLINE_EDIT, FeatureType.LOOKUP
+                FeatureType.INLINE_EDIT, FeatureType.LOOKUP
             )
         ),
         ServiceType.CUSTOM_OPENAI to ModelCapability(
@@ -121,7 +117,6 @@ class ModelRegistry {
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -133,7 +128,6 @@ class ModelRegistry {
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.AUTO_APPLY,
-                FeatureType.COMMIT_MESSAGE,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP,
                 FeatureType.NEXT_EDIT
@@ -157,11 +151,6 @@ class ModelRegistry {
                 ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
-            ),
-            FeatureType.COMMIT_MESSAGE to ModelSelection(
-                ServiceType.OPENAI,
-                GPT_5_MINI,
-                "GPT-5 Mini"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
@@ -196,11 +185,6 @@ class ModelRegistry {
                 MERCURY_CODER,
                 "Mercury Coder"
             ),
-            FeatureType.COMMIT_MESSAGE to ModelSelection(
-                ServiceType.OPENAI,
-                GPT_5_MINI,
-                "GPT-5 Mini"
-            ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT_5_MINI,
@@ -233,11 +217,6 @@ class ModelRegistry {
                 ServiceType.INCEPTION,
                 MERCURY_CODER,
                 "Mercury Coder"
-            ),
-            FeatureType.COMMIT_MESSAGE to ModelSelection(
-                ServiceType.OPENAI,
-                GPT_5_CODEX,
-                "GPT-5 Codex"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
@@ -274,11 +253,6 @@ class ModelRegistry {
             MERCURY_CODER,
             "Mercury Coder"
         ),
-        FeatureType.COMMIT_MESSAGE to ModelSelection(
-            ServiceType.OPENAI,
-            GPT_5_MINI,
-            "GPT-5 Mini"
-        ),
         FeatureType.INLINE_EDIT to ModelSelection(
             ServiceType.OPENAI,
             GPT_5_MINI,
@@ -296,8 +270,7 @@ class ModelRegistry {
     fun getAllModelsForFeature(featureType: FeatureType): List<ModelSelection> {
         return when (featureType) {
             FeatureType.AGENT -> getAllAgentModels()
-            FeatureType.CHAT, FeatureType.COMMIT_MESSAGE,
-            FeatureType.INLINE_EDIT, FeatureType.LOOKUP -> getAllChatModels()
+            FeatureType.CHAT, FeatureType.INLINE_EDIT, FeatureType.LOOKUP -> getAllChatModels()
 
             FeatureType.AUTO_APPLY -> getAllApplyModels()
             FeatureType.CODE_COMPLETION -> getAllCodeModels()

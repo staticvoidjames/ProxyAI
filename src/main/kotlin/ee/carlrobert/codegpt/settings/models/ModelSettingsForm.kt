@@ -46,10 +46,10 @@ class ModelSettingsForm(
                     FeatureConfig(FeatureType.AGENT, "settings.models.agent.label"),
                     FeatureConfig(FeatureType.CHAT, "settings.models.chat.label"),
                     FeatureConfig(FeatureType.AUTO_APPLY, "settings.models.autoApply.label"),
-                    FeatureConfig(
-                        FeatureType.COMMIT_MESSAGE,
-                        "settings.models.commitMessages.label"
-                    ),
+                    // FeatureConfig(
+                    //     FeatureType.COMMIT_MESSAGE,
+                    //     "settings.models.commitMessages.label"
+                    // ),
                     FeatureConfig(FeatureType.INLINE_EDIT, "settings.models.inlineEdit.label"),
                     FeatureConfig(FeatureType.LOOKUP, "settings.models.nameLookups.label")
                 )
@@ -91,9 +91,9 @@ class ModelSettingsForm(
                     modelChanged(FeatureType.AUTO_APPLY, newModel, serviceType)
                 }
 
-                override fun commitMessageModelChanged(newModel: String, serviceType: ServiceType) {
-                    modelChanged(FeatureType.COMMIT_MESSAGE, newModel, serviceType)
-                }
+                // override fun commitMessageModelChanged(newModel: String, serviceType: ServiceType) {
+                //     modelChanged(FeatureType.COMMIT_MESSAGE, newModel, serviceType)
+                // }
 
                 override fun inlineEditModelChanged(newModel: String, serviceType: ServiceType) {
                     modelChanged(FeatureType.INLINE_EDIT, newModel, serviceType)

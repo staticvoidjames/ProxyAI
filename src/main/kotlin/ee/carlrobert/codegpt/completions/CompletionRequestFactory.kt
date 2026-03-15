@@ -28,7 +28,6 @@ interface CompletionRequestFactory {
     fun createInlineEditRequest(params: InlineEditCompletionParameters): CompletionRequest
     fun createInlineEditQuestionRequest(parameters: ChatCompletionParameters): CompletionRequest
     fun createAutoApplyRequest(params: AutoApplyParameters): CompletionRequest
-    fun createCommitMessageRequest(params: CommitMessageCompletionParameters): CompletionRequest
     fun createLookupRequest(params: LookupCompletionParameters): CompletionRequest
     fun createNextEditRequest(
         params: NextEditParameters,
@@ -204,16 +203,6 @@ abstract class BaseRequestFactory : CompletionRequestFactory {
             AUTO_APPLY_MAX_TOKENS,
             true,
             FeatureType.INLINE_EDIT
-        )
-    }
-
-    override fun createCommitMessageRequest(params: CommitMessageCompletionParameters): CompletionRequest {
-        return createBasicCompletionRequest(
-            params.systemPrompt,
-            params.gitDiff,
-            512,
-            true,
-            FeatureType.COMMIT_MESSAGE
         )
     }
 

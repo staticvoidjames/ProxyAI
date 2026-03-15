@@ -166,17 +166,6 @@ public final class CompletionRequestService {
     return getChatCompletionAsync(request, eventListener, selectedService, FeatureType.AUTO_APPLY);
   }
 
-  public EventSource getCommitMessageAsync(
-      CommitMessageCompletionParameters params,
-      CompletionEventListener<String> eventListener) {
-    var serviceType =
-        ModelSelectionService.getInstance().getServiceForFeature(FeatureType.COMMIT_MESSAGE);
-    var request = CompletionRequestFactory
-        .getFactory(serviceType)
-        .createCommitMessageRequest(params);
-    return getChatCompletionAsync(request, eventListener, serviceType, FeatureType.COMMIT_MESSAGE);
-  }
-
   public EventSource getInlineEditCompletionAsync(
       InlineEditCompletionParameters params,
       CompletionEventListener<String> eventListener) {

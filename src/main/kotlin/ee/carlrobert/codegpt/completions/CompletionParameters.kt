@@ -152,12 +152,6 @@ class ChatCompletionParameters private constructor(
     }
 }
 
-data class CommitMessageCompletionParameters(
-    val gitDiff: String,
-    val systemPrompt: String,
-    val featureType: FeatureType = FeatureType.COMMIT_MESSAGE
-) : CompletionParameters
-
 data class LookupCompletionParameters(
     val prompt: String,
     val featureType: FeatureType = FeatureType.LOOKUP

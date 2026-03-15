@@ -45,7 +45,7 @@ object LegacySettingsMigration {
             setModelSelection(FeatureType.AGENT, agentModel, selectedService)
             setModelSelection(FeatureType.CHAT, chatModel, selectedService)
             setModelSelection(FeatureType.AUTO_APPLY, chatModel, selectedService)
-            setModelSelection(FeatureType.COMMIT_MESSAGE, chatModel, selectedService)
+            // setModelSelection(FeatureType.COMMIT_MESSAGE, chatModel, selectedService)
             setModelSelection(FeatureType.INLINE_EDIT, chatModel, selectedService)
             setModelSelection(FeatureType.LOOKUP, chatModel, selectedService)
 

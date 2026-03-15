@@ -134,16 +134,6 @@ class OpenAIRequestFactory : BaseRequestFactory() {
         }
     }
 
-    override fun createCommitMessageRequest(params: CommitMessageCompletionParameters): OpenAIChatCompletionRequest {
-        val model =
-            ModelSelectionService.getInstance().getModelForFeature(FeatureType.COMMIT_MESSAGE)
-        val (gitDiff, systemPrompt) = params
-        if (isReasoningModel(model)) {
-            return buildBasicO1Request(model, gitDiff, systemPrompt, stream = true)
-        }
-        return createBasicCompletionRequest(systemPrompt, gitDiff, model, true)
-    }
-
     override fun createLookupRequest(params: LookupCompletionParameters): OpenAIChatCompletionRequest {
         val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.LOOKUP)
         val (prompt) = params

@@ -79,21 +79,6 @@ class InceptionRequestFactory : BaseRequestFactory() {
             .build()
     }
 
-    override fun createCommitMessageRequest(params: CommitMessageCompletionParameters): OpenAIChatCompletionRequest {
-        val model =
-            ModelSelectionService.getInstance().getModelForFeature(FeatureType.COMMIT_MESSAGE)
-        val (gitDiff, systemPrompt) = params
-        return OpenAIChatCompletionRequest.Builder(
-            listOf(
-                OpenAIChatCompletionStandardMessage("system", systemPrompt),
-                OpenAIChatCompletionStandardMessage("user", gitDiff)
-            )
-        )
-            .setModel(model)
-            .setStream(true)
-            .build()
-    }
-
     override fun createLookupRequest(params: LookupCompletionParameters): OpenAIChatCompletionRequest {
         val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.LOOKUP)
         val (prompt) = params

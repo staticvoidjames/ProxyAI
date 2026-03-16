@@ -45,7 +45,6 @@ class ModelSettingsForm(
                 features = listOf(
                     FeatureConfig(FeatureType.AGENT, "settings.models.agent.label"),
                     FeatureConfig(FeatureType.CHAT, "settings.models.chat.label"),
-                    FeatureConfig(FeatureType.AUTO_APPLY, "settings.models.autoApply.label"),
                     // FeatureConfig(
                     //     FeatureType.COMMIT_MESSAGE,
                     //     "settings.models.commitMessages.label"
@@ -86,14 +85,6 @@ class ModelSettingsForm(
                 override fun codeModelChanged(newModel: String, serviceType: ServiceType) {
                     modelChanged(FeatureType.CODE_COMPLETION, newModel, serviceType)
                 }
-
-                override fun autoApplyModelChanged(newModel: String, serviceType: ServiceType) {
-                    modelChanged(FeatureType.AUTO_APPLY, newModel, serviceType)
-                }
-
-                // override fun commitMessageModelChanged(newModel: String, serviceType: ServiceType) {
-                //     modelChanged(FeatureType.COMMIT_MESSAGE, newModel, serviceType)
-                // }
 
                 override fun inlineEditModelChanged(newModel: String, serviceType: ServiceType) {
                     modelChanged(FeatureType.INLINE_EDIT, newModel, serviceType)

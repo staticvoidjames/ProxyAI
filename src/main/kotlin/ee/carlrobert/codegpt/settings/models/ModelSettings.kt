@@ -28,9 +28,6 @@ class ModelSettings : SimplePersistentStateComponent<ModelSettingsState>(ModelSe
         FeatureType.CODE_COMPLETION to PublisherMethod { publisher, model, serviceType ->
             publisher.codeModelChanged(model, serviceType)
         },
-        FeatureType.AUTO_APPLY to PublisherMethod { publisher, model, serviceType ->
-            publisher.autoApplyModelChanged(model, serviceType)
-        },
         // FeatureType.COMMIT_MESSAGE to PublisherMethod { publisher, model, serviceType ->
         //     publisher.commitMessageModelChanged(model, serviceType)
         // },

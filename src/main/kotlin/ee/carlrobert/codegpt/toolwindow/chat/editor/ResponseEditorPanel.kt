@@ -22,7 +22,6 @@ import com.intellij.util.application
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.components.BorderLayoutPanel
 import ee.carlrobert.codegpt.codecompletions.CompletionProgressNotifier
-import ee.carlrobert.codegpt.completions.AutoApplyParameters
 import ee.carlrobert.codegpt.completions.CompletionClientProvider
 import ee.carlrobert.codegpt.completions.CompletionRequestService
 import ee.carlrobert.codegpt.completions.factory.InceptionRequestFactory
@@ -136,74 +135,74 @@ class ResponseEditorPanel(
         replaceEditor(oldEditor, newState.editor)
     }
 
-    fun applyCode(
-        modelSelection: ModelSelection,
-        params: AutoApplyParameters,
-        headerPanel: DefaultHeaderPanel
-    ) {
-        headerPanel.setLoading()
-        CompletionProgressNotifier.update(project, true)
-
-        application.executeOnPooledThread {
-            val originalCode = EditorUtil.getFileContent(params.destination)
-            try {
-                val response = if (modelSelection.provider == INCEPTION) {
-                    val request = InceptionRequestFactory().createAutoApplyRequest(params)
-                    val responseContent = CompletionClientProvider.getInceptionClient()
-                        .getApplyEditCompletion(request)
-                        .choices[0]
-                        .message
-                        .content
-                    extractUpdatedCode(responseContent)
-                } else {
-                    null
-                }
-
-                if (!response.isNullOrBlank()) {
-                    stateManager.transitionToDiffState(
-                        originalCode,
-                        response,
-                        params.destination,
-                        params.source
-                    )
-                }
-            } catch (e: Exception) {
-                logger.error("Failed to apply changes", e)
-                ApplicationManager.getApplication().invokeLater {
-                    if (e is CodeGPTException) {
-                        OverlayUtil.showNotification(e.detail, NotificationType.ERROR)
-                    }
-
-                    if (!project.isDisposed) {
-                        headerPanel.handleDone()
-                    }
-                }
-            } finally {
-                if (!project.isDisposed) {
-                    runInEdt {
-                        CompletionProgressNotifier.update(project, false)
-                    }
-                }
-            }
-        }
-    }
-
-    fun applyCodeAsync(
-        content: String,
-        virtualFile: VirtualFile,
-        editor: EditorEx,
-        headerPanel: DefaultHeaderPanel
-    ) {
-        val eventSource = CompletionRequestService.getInstance().autoApplyAsync(
-            AutoApplyParameters(content, virtualFile),
-            AutoApplyListener(project, stateManager, virtualFile, content) { oldEditor, newEditor ->
-                val responseEditorPanel = editor.component.parent as? ResponseEditorPanel
-                    ?: throw IllegalStateException("Expected parent to be ResponseEditorPanel")
-                responseEditorPanel.replaceEditor(oldEditor, newEditor)
-            })
-
-        headerPanel.setLoading(eventSource)
-    }
+    // fun applyCode(
+    //     modelSelection: ModelSelection,
+    //     params: AutoApplyParameters,
+    //     headerPanel: DefaultHeaderPanel
+    // ) {
+    //     headerPanel.setLoading()
+    //     CompletionProgressNotifier.update(project, true)
+    //
+    //     application.executeOnPooledThread {
+    //         val originalCode = EditorUtil.getFileContent(params.destination)
+    //         try {
+    //             val response = if (modelSelection.provider == INCEPTION) {
+    //                 val request = InceptionRequestFactory().createAutoApplyRequest(params)
+    //                 val responseContent = CompletionClientProvider.getInceptionClient()
+    //                     .getApplyEditCompletion(request)
+    //                     .choices[0]
+    //                     .message
+    //                     .content
+    //                 extractUpdatedCode(responseContent)
+    //             } else {
+    //                 null
+    //             }
+    //
+    //             if (!response.isNullOrBlank()) {
+    //                 stateManager.transitionToDiffState(
+    //                     originalCode,
+    //                     response,
+    //                     params.destination,
+    //                     params.source
+    //                 )
+    //             }
+    //         } catch (e: Exception) {
+    //             logger.error("Failed to apply changes", e)
+    //             ApplicationManager.getApplication().invokeLater {
+    //                 if (e is CodeGPTException) {
+    //                     OverlayUtil.showNotification(e.detail, NotificationType.ERROR)
+    //                 }
+    //
+    //                 if (!project.isDisposed) {
+    //                     headerPanel.handleDone()
+    //                 }
+    //             }
+    //         } finally {
+    //             if (!project.isDisposed) {
+    //                 runInEdt {
+    //                     CompletionProgressNotifier.update(project, false)
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    //
+    // fun applyCodeAsync(
+    //     content: String,
+    //     virtualFile: VirtualFile,
+    //     editor: EditorEx,
+    //     headerPanel: DefaultHeaderPanel
+    // ) {
+    //     val eventSource = CompletionRequestService.getInstance().autoApplyAsync(
+    //         AutoApplyParameters(content, virtualFile),
+    //         AutoApplyListener(project, stateManager, virtualFile, content) { oldEditor, newEditor ->
+    //             val responseEditorPanel = editor.component.parent as? ResponseEditorPanel
+    //                 ?: throw IllegalStateException("Expected parent to be ResponseEditorPanel")
+    //             responseEditorPanel.replaceEditor(oldEditor, newEditor)
+    //         })
+    //
+    //     headerPanel.setLoading(eventSource)
+    // }
 
     internal fun createReplaceWaitingSegment(
         searchContent: String,

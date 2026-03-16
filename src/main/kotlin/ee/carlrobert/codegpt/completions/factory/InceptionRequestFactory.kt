@@ -7,8 +7,6 @@ import ee.carlrobert.codegpt.settings.prompts.PromptsSettings
 import ee.carlrobert.codegpt.settings.service.FeatureType
 import ee.carlrobert.codegpt.settings.service.ModelSelectionService
 import ee.carlrobert.codegpt.util.EditWindowFormatter.FormatResult
-import ee.carlrobert.codegpt.util.EditorUtil
-import ee.carlrobert.llm.client.inception.request.InceptionApplyRequest
 import ee.carlrobert.llm.client.inception.request.InceptionNextEditRequest
 import ee.carlrobert.llm.client.openai.completion.request.OpenAIChatCompletionRequest
 import ee.carlrobert.llm.client.openai.completion.request.OpenAIChatCompletionStandardMessage
@@ -36,17 +34,6 @@ class InceptionRequestFactory : BaseRequestFactory() {
         return OpenAIChatCompletionRequest.Builder(messages)
             .setModel(model)
             .setStream(true)
-            .build()
-    }
-
-    override fun createAutoApplyRequest(params: AutoApplyParameters): InceptionApplyRequest {
-        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.AUTO_APPLY)
-        val prompt =
-            "<|original_code|>\n" + EditorUtil.getFileContent(params.destination) + "\n<|/original_code|>\n\n<|update_snippet|>\n" + params.source + "\n<|/update_snippet|>"
-
-        return InceptionApplyRequest.Builder()
-            .setModel(model)
-            .setMessages(listOf(OpenAIChatCompletionStandardMessage("user", prompt)))
             .build()
     }
 

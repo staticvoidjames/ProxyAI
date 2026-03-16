@@ -7,7 +7,6 @@ interface ModelChangeNotifier {
     fun agentModelChanged(newModel: String, serviceType: ServiceType)
     fun chatModelChanged(newModel: String, serviceType: ServiceType)
     fun codeModelChanged(newModel: String, serviceType: ServiceType)
-    fun autoApplyModelChanged(newModel: String, serviceType: ServiceType)
     fun inlineEditModelChanged(newModel: String, serviceType: ServiceType)
     fun nextEditModelChanged(newModel: String, serviceType: ServiceType)
     fun nameLookupModelChanged(newModel: String, serviceType: ServiceType)
@@ -28,7 +27,6 @@ abstract class ModelChangeNotifierAdapter : ModelChangeNotifier {
     override fun agentModelChanged(newModel: String, serviceType: ServiceType) {}
     override fun chatModelChanged(newModel: String, serviceType: ServiceType) {}
     override fun codeModelChanged(newModel: String, serviceType: ServiceType) {}
-    override fun autoApplyModelChanged(newModel: String, serviceType: ServiceType) {}
     // override fun commitMessageModelChanged(newModel: String, serviceType: ServiceType) {}
     override fun inlineEditModelChanged(newModel: String, serviceType: ServiceType) {}
     override fun nextEditModelChanged(newModel: String, serviceType: ServiceType) {}

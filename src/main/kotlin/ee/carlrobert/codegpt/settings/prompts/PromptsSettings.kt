@@ -44,7 +44,6 @@ class CoreActionsState : BaseState() {
     companion object {
         private const val PROMPTS_BASE_PATH = "/prompts/core/"
 
-        val DEFAULT_AUTO_APPLY_PROMPT = loadPrompt("auto-apply.txt")
         val DEFAULT_INLINE_EDIT_PROMPT = loadPrompt("inline-edit.txt")
         val DEFAULT_GENERATE_COMMIT_MESSAGE_PROMPT = loadPrompt("generate-commit-message.txt")
         val DEFAULT_GENERATE_NAME_LOOKUPS_PROMPT = loadPrompt("generate-name-lookups.txt")
@@ -54,12 +53,6 @@ class CoreActionsState : BaseState() {
         private fun loadPrompt(fileName: String) =
             getResourceContent(PROMPTS_BASE_PATH + fileName)
     }
-
-    var autoApply by property(
-        createCoreAction(
-            "Auto Apply", "AUTO_APPLY", DEFAULT_AUTO_APPLY_PROMPT
-        )
-    )
 
     var inlineEdit by property(
         createCoreAction(

@@ -1,7 +1,6 @@
 package ee.carlrobert.codegpt.completions
 
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import ee.carlrobert.codegpt.ReferencedFile
 import ee.carlrobert.codegpt.conversations.Conversation
 import ee.carlrobert.codegpt.conversations.message.Message
@@ -162,13 +161,6 @@ enum class RequestType {
     TOOL_CALL_REQUEST,
     TOOL_CALL_CONTINUATION
 }
-
-data class AutoApplyParameters(
-    val source: String,
-    val destination: VirtualFile,
-    val chatMode: ChatMode = ChatMode.ASK,
-    val featureType: FeatureType = FeatureType.AUTO_APPLY
-)
 
 data class InlineEditCompletionParameters(
     val selectedText: String? = null,

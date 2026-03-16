@@ -67,7 +67,6 @@ class ModelRegistry {
                 FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
-                FeatureType.AUTO_APPLY,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -77,7 +76,6 @@ class ModelRegistry {
             setOf(
                 FeatureType.AGENT,
                 FeatureType.CHAT,
-                FeatureType.AUTO_APPLY,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -87,7 +85,6 @@ class ModelRegistry {
             setOf(
                 FeatureType.AGENT,
                 FeatureType.CHAT,
-                FeatureType.AUTO_APPLY,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -98,7 +95,6 @@ class ModelRegistry {
                 FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
-                FeatureType.AUTO_APPLY,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -106,7 +102,7 @@ class ModelRegistry {
         ServiceType.LLAMA_CPP to ModelCapability(
             ServiceType.LLAMA_CPP,
             setOf(
-                FeatureType.CHAT, FeatureType.CODE_COMPLETION, FeatureType.AUTO_APPLY,
+                FeatureType.CHAT, FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT, FeatureType.LOOKUP
             )
         ),
@@ -116,7 +112,6 @@ class ModelRegistry {
                 FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
-                FeatureType.AUTO_APPLY,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -127,7 +122,6 @@ class ModelRegistry {
                 FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
-                FeatureType.AUTO_APPLY,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP,
                 FeatureType.NEXT_EDIT
@@ -146,11 +140,6 @@ class ModelRegistry {
                 ServiceType.OPENAI,
                 GPT_5_MINI,
                 "GPT-5 Mini"
-            ),
-            FeatureType.AUTO_APPLY to ModelSelection(
-                ServiceType.INCEPTION,
-                MERCURY_CODER,
-                "Mercury Coder"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
@@ -180,11 +169,6 @@ class ModelRegistry {
                 "GPT-5.2"
             ),
             FeatureType.CHAT to ModelSelection(ServiceType.OPENAI, GPT_5_MINI, "GPT-5 Mini"),
-            FeatureType.AUTO_APPLY to ModelSelection(
-                ServiceType.INCEPTION,
-                MERCURY_CODER,
-                "Mercury Coder"
-            ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT_5_MINI,
@@ -212,11 +196,6 @@ class ModelRegistry {
                 ServiceType.OPENAI,
                 GPT5_2.id,
                 "GPT-5.2"
-            ),
-            FeatureType.AUTO_APPLY to ModelSelection(
-                ServiceType.INCEPTION,
-                MERCURY_CODER,
-                "Mercury Coder"
             ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
@@ -248,11 +227,6 @@ class ModelRegistry {
             GPT_5_MINI,
             "GPT-5 Mini"
         ),
-        FeatureType.AUTO_APPLY to ModelSelection(
-            ServiceType.INCEPTION,
-            MERCURY_CODER,
-            "Mercury Coder"
-        ),
         FeatureType.INLINE_EDIT to ModelSelection(
             ServiceType.OPENAI,
             GPT_5_MINI,
@@ -271,8 +245,6 @@ class ModelRegistry {
         return when (featureType) {
             FeatureType.AGENT -> getAllAgentModels()
             FeatureType.CHAT, FeatureType.INLINE_EDIT, FeatureType.LOOKUP -> getAllChatModels()
-
-            FeatureType.AUTO_APPLY -> getAllApplyModels()
             FeatureType.CODE_COMPLETION -> getAllCodeModels()
             FeatureType.NEXT_EDIT -> getNextEditModels()
         }

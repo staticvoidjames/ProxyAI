@@ -154,18 +154,6 @@ public final class CompletionRequestService {
     return getChatCompletion(request, serviceType, FeatureType.LOOKUP);
   }
 
-  public EventSource autoApplyAsync(
-      AutoApplyParameters params,
-      CompletionEventListener<String> eventListener) {
-    var selectedService =
-        ModelSelectionService.getInstance().getServiceForFeature(FeatureType.AUTO_APPLY);
-
-    var request = CompletionRequestFactory
-        .getFactory(selectedService)
-        .createAutoApplyRequest(params);
-    return getChatCompletionAsync(request, eventListener, selectedService, FeatureType.AUTO_APPLY);
-  }
-
   public EventSource getInlineEditCompletionAsync(
       InlineEditCompletionParameters params,
       CompletionEventListener<String> eventListener) {

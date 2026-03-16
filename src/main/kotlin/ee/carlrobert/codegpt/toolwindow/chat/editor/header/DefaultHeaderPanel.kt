@@ -1,7 +1,12 @@
 package ee.carlrobert.codegpt.toolwindow.chat.editor.header
 
 import com.intellij.icons.AllIcons
-import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.actionSystem.ActionGroup
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.ActionToolbar
+import com.intellij.openapi.actionSystem.AnAction
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.DefaultActionGroup
 import com.intellij.openapi.actionSystem.toolbarLayout.ToolbarLayoutStrategy
 import com.intellij.openapi.application.runInEdt
 import com.intellij.openapi.diagnostic.thisLogger
@@ -11,12 +16,14 @@ import com.intellij.openapi.ui.JBMenuItem
 import com.intellij.openapi.ui.JBPopupMenu
 import com.intellij.util.ui.JBUI
 import ee.carlrobert.codegpt.CodeGPTBundle
-import ee.carlrobert.codegpt.completions.AutoApplyParameters
-import ee.carlrobert.codegpt.settings.service.FeatureType
-import ee.carlrobert.codegpt.settings.service.ModelSelectionService
-import ee.carlrobert.codegpt.settings.service.ServiceType.INCEPTION
 import ee.carlrobert.codegpt.toolwindow.chat.editor.ResponseEditorPanel
-import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.*
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.AutoApplyAction
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.CopyAction
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.DiffAction
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.EditAction
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.InsertAtCaretAction
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.NewFileAction
+import ee.carlrobert.codegpt.toolwindow.chat.editor.actions.ReplaceSelectionAction
 import ee.carlrobert.codegpt.util.EditorUtil
 import ee.carlrobert.codegpt.util.StringUtil
 import okhttp3.sse.EventSource
@@ -104,15 +111,15 @@ class DefaultHeaderPanel(config: HeaderConfig) : HeaderPanel(config) {
                 return
             }
 
-            val modelSelection =
-                ModelSelectionService.getInstance()
-                    .getModelSelectionForFeature(FeatureType.AUTO_APPLY);
-            val params = AutoApplyParameters(editor.document.text, file)
-            if (modelSelection.provider == INCEPTION) {
-                responseEditorPanel.applyCode(modelSelection, params, this)
-            } else {
-                responseEditorPanel.applyCodeAsync(editor.document.text, file, editor, this)
-            }
+            // val modelSelection =
+            //     ModelSelectionService.getInstance()
+            //         .getModelSelectionForFeature(FeatureType.AUTO_APPLY);
+            // val params = AutoApplyParameters(editor.document.text, file)
+            // if (modelSelection.provider == INCEPTION) {
+            //     responseEditorPanel.applyCode(modelSelection, params, this)
+            // } else {
+            //     responseEditorPanel.applyCodeAsync(editor.document.text, file, editor, this)
+            // }
         } catch (e: Exception) {
             logger.error(e.message, e)
         }

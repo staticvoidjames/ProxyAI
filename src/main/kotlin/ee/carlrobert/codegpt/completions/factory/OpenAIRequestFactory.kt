@@ -1,7 +1,6 @@
 package ee.carlrobert.codegpt.completions.factory
 
 import com.intellij.openapi.components.service
-import com.intellij.openapi.vfs.readText
 import ee.carlrobert.codegpt.EncodingManager
 import ee.carlrobert.codegpt.ReferencedFile
 import ee.carlrobert.codegpt.completions.*
@@ -83,26 +82,6 @@ class OpenAIRequestFactory : BaseRequestFactory() {
                 .setTemperature(configuration.temperature.toDouble())
                 .build()
         }
-    }
-
-    override fun createAutoApplyRequest(params: AutoApplyParameters): CompletionRequest {
-        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.AUTO_APPLY)
-        val systemPrompt =
-            service<FilteredPromptsService>().getFilteredAutoApplyPrompt(params.chatMode)
-                .replace("{{changes_to_merge}}", CompletionRequestUtil.formatCode(params.source))
-                .replace(
-                    "{{destination_file}}",
-                    CompletionRequestUtil.formatCode(
-                        params.destination.readText(),
-                        params.destination.path
-                    )
-                )
-        val prompt = "Merge the following changes to the destination file."
-
-        if (isReasoningModel(model)) {
-            return buildBasicO1Request(model, prompt, systemPrompt, stream = true)
-        }
-        return createBasicCompletionRequest(systemPrompt, prompt, model, true)
     }
 
     override fun createBasicCompletionRequest(

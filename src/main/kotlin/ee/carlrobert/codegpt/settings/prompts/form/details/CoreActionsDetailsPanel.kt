@@ -8,11 +8,9 @@ import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.layout.ComponentPredicate
 import com.intellij.util.ui.components.BorderLayoutPanel
-import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_AUTO_APPLY_PROMPT
-import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_INLINE_EDIT_PROMPT
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_FIX_COMPILE_ERRORS_PROMPT
-import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_GENERATE_COMMIT_MESSAGE_PROMPT
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_GENERATE_NAME_LOOKUPS_PROMPT
+import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_INLINE_EDIT_PROMPT
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState.Companion.DEFAULT_REVIEW_CHANGES_PROMPT
 import ee.carlrobert.codegpt.settings.prompts.PromptsSettings
 import javax.swing.JComponent
@@ -26,13 +24,6 @@ class CoreActionsDetailsPanel : PromptDetailsPanel {
 
             override fun create(details: CoreActionPromptDetails): JComponent {
                 val editorPanel = when (details.code) {
-
-                    "AUTO_APPLY" -> CoreActionEditorPanel(
-                        details,
-                        DEFAULT_AUTO_APPLY_PROMPT,
-                        "Template used for the 'Auto Apply' feature."
-                    )
-
                     "INLINE_EDIT" -> CoreActionEditorPanel(
                         details,
                         DEFAULT_INLINE_EDIT_PROMPT,
@@ -74,7 +65,6 @@ class CoreActionsDetailsPanel : PromptDetailsPanel {
     init {
         val settings = service<PromptsSettings>().state.coreActions
         listOf(
-            settings.autoApply,
             settings.inlineEdit,
             settings.fixCompileErrors,
             settings.generateCommitMessage,

@@ -2,7 +2,6 @@ package ee.carlrobert.codegpt.settings.prompts
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import com.intellij.openapi.vfs.VirtualFile
 import ee.carlrobert.codegpt.settings.configuration.ChatMode
 import ee.carlrobert.codegpt.settings.configuration.ConfigurationSettings
 import ee.carlrobert.codegpt.util.file.FileUtil.getResourceContent
@@ -17,12 +16,6 @@ import ee.carlrobert.codegpt.util.file.FileUtil.getResourceContent
  */
 @Service
 class FilteredPromptsService {
-
-    fun getFilteredAutoApplyPrompt(chatMode: ChatMode): String =
-        getOriginalAutoApplyPrompt().addProjectPath()
-
-    fun getFilteredAutoApplyPrompt(chatMode: ChatMode, virtualFile: VirtualFile?): String =
-        getOriginalAutoApplyPrompt().addProjectPath(virtualFile)
 
     fun getFilteredPersonaPrompt(chatMode: ChatMode): String {
         val selectedPersona = service<PromptsSettings>().state.personas.selectedPersona
@@ -56,10 +49,6 @@ class FilteredPromptsService {
 
     private fun isDefaultPersona(persona: PersonaPromptDetailsState) =
         persona.id == DEFAULT_PERSONA_ID
-
-    private fun getOriginalAutoApplyPrompt() =
-        service<PromptsSettings>().state.coreActions.autoApply.instructions
-            ?: CoreActionsState.DEFAULT_AUTO_APPLY_PROMPT
 
     private fun getOriginalEditCodePrompt() =
         service<PromptsSettings>().state.coreActions.inlineEdit.instructions

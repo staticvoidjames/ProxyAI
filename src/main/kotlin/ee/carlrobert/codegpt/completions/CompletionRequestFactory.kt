@@ -11,7 +11,6 @@ import ee.carlrobert.codegpt.nextedit.NextEditPromptUtil
 import ee.carlrobert.codegpt.psistructure.ClassStructureSerializer
 import ee.carlrobert.codegpt.settings.configuration.ChatMode
 import ee.carlrobert.codegpt.settings.prompts.CoreActionsState
-import ee.carlrobert.codegpt.settings.prompts.FilteredPromptsService
 import ee.carlrobert.codegpt.settings.prompts.PersonaDetails
 import ee.carlrobert.codegpt.settings.prompts.PromptsSettings
 import ee.carlrobert.codegpt.settings.service.FeatureType
@@ -20,14 +19,12 @@ import ee.carlrobert.codegpt.settings.service.ServiceType
 import ee.carlrobert.codegpt.util.EditWindowFormatter.FormatResult
 import ee.carlrobert.codegpt.util.EditorUtil
 import ee.carlrobert.codegpt.util.GitUtil
-import ee.carlrobert.codegpt.util.file.FileUtil
 import ee.carlrobert.llm.completion.CompletionRequest
 
 interface CompletionRequestFactory {
     fun createChatRequest(params: ChatCompletionParameters): CompletionRequest
     fun createInlineEditRequest(params: InlineEditCompletionParameters): CompletionRequest
     fun createInlineEditQuestionRequest(parameters: ChatCompletionParameters): CompletionRequest
-    fun createAutoApplyRequest(params: AutoApplyParameters): CompletionRequest
     fun createLookupRequest(params: LookupCompletionParameters): CompletionRequest
     fun createNextEditRequest(
         params: NextEditParameters,
@@ -65,7 +62,7 @@ abstract class BaseRequestFactory : CompletionRequestFactory {
 
     companion object {
         private const val LOOKUP_MAX_TOKENS = 512
-        private const val AUTO_APPLY_MAX_TOKENS = 8192
+        private const val INLINE_EDIT_MAX_TOKENS = 8192
         private const val DEFAULT_MAX_TOKENS = 4096
     }
 
@@ -200,7 +197,7 @@ abstract class BaseRequestFactory : CompletionRequestFactory {
         return createBasicCompletionRequest(
             systemPrompt,
             "systemPrompt.userPrompt",
-            AUTO_APPLY_MAX_TOKENS,
+            INLINE_EDIT_MAX_TOKENS,
             true,
             FeatureType.INLINE_EDIT
         )
@@ -214,34 +211,6 @@ abstract class BaseRequestFactory : CompletionRequestFactory {
             LOOKUP_MAX_TOKENS,
             false,
             FeatureType.LOOKUP
-        )
-    }
-
-    override fun createAutoApplyRequest(params: AutoApplyParameters): CompletionRequest {
-        val destination = params.destination
-        val language = FileUtil.getFileExtension(destination.path)
-
-        val formattedSource = CompletionRequestUtil.formatCodeWithLanguage(params.source, language)
-        val formattedDestination =
-            CompletionRequestUtil.formatCode(
-                EditorUtil.getFileContent(destination),
-                destination.path
-            )
-
-        val systemPromptTemplate = service<FilteredPromptsService>().getFilteredAutoApplyPrompt(
-            params.chatMode,
-            params.destination
-        )
-        val systemPrompt = systemPromptTemplate
-            .replace("{{changes_to_merge}}", formattedSource)
-            .replace("{{destination_file}}", formattedDestination)
-
-        return createBasicCompletionRequest(
-            systemPrompt,
-            "Merge the following changes to the destination file.",
-            AUTO_APPLY_MAX_TOKENS,
-            true,
-            FeatureType.AUTO_APPLY
         )
     }
 

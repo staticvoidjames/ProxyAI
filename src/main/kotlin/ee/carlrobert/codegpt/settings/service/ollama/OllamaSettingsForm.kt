@@ -57,7 +57,7 @@ class OllamaSettingsForm {
         )
         val emptyModelsComboBoxModel =
             DefaultComboBoxModel(arrayOf("Hit refresh to see models for this host"))
-        modelComboBoxes = mapOf(FeatureType.CHAT to ComboBox(emptyModelsComboBoxModel).apply {
+        modelComboBoxes = mapOf(FeatureType.INLINE_EDIT to ComboBox(emptyModelsComboBoxModel).apply {
             isEnabled = false
             preferredSize = Dimension(280, preferredSize.height)
         })
@@ -73,7 +73,7 @@ class OllamaSettingsForm {
         refreshModelsButton.addActionListener {
             refreshModels(
                 mapOf(
-                    FeatureType.CHAT to (getModel(FeatureType.CHAT) ?: settings.model),
+                    FeatureType.INLINE_EDIT to (getModel(FeatureType.INLINE_EDIT) ?: settings.model),
                 )
             )
         }
@@ -96,7 +96,7 @@ class OllamaSettingsForm {
                 )
                 .addLabeledComponent(
                     CodeGPTBundle.get("settingsConfigurable.shared.model.label"),
-                    modelComboBoxes[FeatureType.CHAT]!!
+                    modelComboBoxes[FeatureType.INLINE_EDIT]!!
                 )
                 .addComponent(refreshModelsButton)
                 .addComponent(TitledSeparator(CodeGPTBundle.get("settingsConfigurable.shared.authentication.title")))
@@ -121,7 +121,7 @@ class OllamaSettingsForm {
     fun resetForm() {
         service<OllamaSettings>().state.run {
             hostField.text = host
-            modelComboBoxes[FeatureType.CHAT]!!.item = model ?: ""
+            modelComboBoxes[FeatureType.INLINE_EDIT]!!.item = model ?: ""
             codeCompletionConfigurationForm.isCodeCompletionsEnabled = codeCompletionsEnabled
             codeCompletionConfigurationForm.fimTemplate = fimTemplate
             codeCompletionConfigurationForm.fimOverride != fimOverride
@@ -132,8 +132,8 @@ class OllamaSettingsForm {
     fun applyChanges() {
         service<OllamaSettings>().state.run {
             host = hostField.text
-            if (modelComboBoxes[FeatureType.CHAT]?.isEnabled == true)
-                model = modelComboBoxes[FeatureType.CHAT]?.item
+            if (modelComboBoxes[FeatureType.INLINE_EDIT]?.isEnabled == true)
+                model = modelComboBoxes[FeatureType.INLINE_EDIT]?.item
             codeCompletionsEnabled = codeCompletionConfigurationForm.isCodeCompletionsEnabled
             fimTemplate = codeCompletionConfigurationForm.fimTemplate ?: fimTemplate
             fimOverride = codeCompletionConfigurationForm.fimOverride == true
@@ -143,7 +143,7 @@ class OllamaSettingsForm {
 
     fun isModified() = service<OllamaSettings>().state.run {
         hostField.text != host
-                || (modelComboBoxes[FeatureType.CHAT]!!.item != model && modelComboBoxes[FeatureType.CHAT]!!.isEnabled)
+                || (modelComboBoxes[FeatureType.INLINE_EDIT]!!.item != model && modelComboBoxes[FeatureType.INLINE_EDIT]!!.isEnabled)
                 || codeCompletionConfigurationForm.isCodeCompletionsEnabled != codeCompletionsEnabled
                 || codeCompletionConfigurationForm.fimTemplate != fimTemplate
                 || codeCompletionConfigurationForm.fimOverride != fimOverride

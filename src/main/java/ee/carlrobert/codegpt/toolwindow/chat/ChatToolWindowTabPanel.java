@@ -125,7 +125,7 @@ public class ChatToolWindowTabPanel implements Disposable {
         project,
         totalTokensPanel,
         this,
-        FeatureType.CHAT,
+        FeatureType.INLINE_EDIT,
         tagManager,
         this::handleSubmit,
         this::handleCancel,
@@ -520,7 +520,7 @@ public class ChatToolWindowTabPanel implements Disposable {
       return;
     }
 
-    if (!CompletionRequestService.isRequestAllowed(FeatureType.CHAT)) {
+    if (!CompletionRequestService.isRequestAllowed(FeatureType.INLINE_EDIT)) {
       responseContent.displayMissingCredential();
       return;
     }

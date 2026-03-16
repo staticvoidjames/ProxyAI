@@ -60,7 +60,7 @@ class AgentCreditsToolbarLabel(
         messageBusConnection.subscribe(
             ModelChangeNotifier.getTopic(),
             object : ModelChangeNotifierAdapter() {
-                override fun chatModelChanged(newModel: String, serviceType: ServiceType) {
+                override fun inlineEditModelChanged(newModel: String, serviceType: ServiceType) {
                     updateDisplay()
                 }
             }

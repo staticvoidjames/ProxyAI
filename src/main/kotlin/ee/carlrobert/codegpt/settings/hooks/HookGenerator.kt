@@ -74,7 +74,7 @@ object HookGenerator {
     suspend fun generate(query: String, project: Project? = null): GeneratedHookResult {
         return try {
             val modelService = service<ModelSelectionService>()
-            val provider: ServiceType = modelService.getServiceForFeature(FeatureType.CHAT)
+            val provider: ServiceType = modelService.getServiceForFeature(FeatureType.INLINE_EDIT)
             val model = modelService.getAgentModel()
             val executor = AgentFactory.createExecutor(provider)
             val workspaceInfo = getWorkspaceInfo(project)

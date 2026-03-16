@@ -69,7 +69,7 @@ public class LlamaSettings implements PersistentStateComponent<LlamaSettingsStat
 
   public static boolean isRunnable() {
     return (IS_OS_MAC_OSX || IS_OS_LINUX)
-        && ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT) == LLAMA_CPP;
+        && ModelSelectionService.getInstance().getServiceForFeature(FeatureType.INLINE_EDIT) == LLAMA_CPP;
   }
 
   public static boolean isRunnable(HuggingFaceModel model) {

@@ -26,7 +26,7 @@ class GoogleRequestFactory : BaseRequestFactory() {
 
     override fun createChatRequest(params: ChatCompletionParameters): GoogleCompletionRequest {
         val configuration = service<ConfigurationSettings>().state
-        val selectedModel = ModelSelectionService.getInstance().getModelForFeature(FeatureType.CHAT)
+        val selectedModel = ModelSelectionService.getInstance().getModelForFeature(FeatureType.INLINE_EDIT)
         val messages = buildGoogleMessages(selectedModel, params)
         return GoogleCompletionRequest.Builder(messages)
             .generationConfig(

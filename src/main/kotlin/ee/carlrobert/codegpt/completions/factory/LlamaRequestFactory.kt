@@ -13,7 +13,7 @@ import ee.carlrobert.llm.client.openai.completion.request.OpenAIChatCompletionSt
 class LlamaRequestFactory : BaseRequestFactory() {
 
     override fun createChatRequest(params: ChatCompletionParameters): OpenAIChatCompletionRequest {
-        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.CHAT)
+        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.INLINE_EDIT)
         val configuration = service<ConfigurationSettings>().state
         return OpenAIChatCompletionRequest.Builder(
             OpenAIRequestFactory.buildOpenAIMessages(model, params)

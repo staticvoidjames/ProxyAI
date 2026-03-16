@@ -43,7 +43,6 @@ class ModelSettingsForm(
                 titleKey = "settings.models.chat.section.title",
                 descriptionKey = "settings.models.chat.section.description",
                 features = listOf(
-                    FeatureConfig(FeatureType.CHAT, "settings.models.chat.label"),
                     // FeatureConfig(
                     //     FeatureType.COMMIT_MESSAGE,
                     //     "settings.models.commitMessages.label"
@@ -73,10 +72,6 @@ class ModelSettingsForm(
         messageBusConnection.subscribe(
             ModelChangeNotifier.getTopic(),
             object : ModelChangeNotifier {
-                override fun chatModelChanged(newModel: String, serviceType: ServiceType) {
-                    modelChanged(FeatureType.CHAT, newModel, serviceType)
-                }
-
                 override fun codeModelChanged(newModel: String, serviceType: ServiceType) {
                     modelChanged(FeatureType.CODE_COMPLETION, newModel, serviceType)
                 }

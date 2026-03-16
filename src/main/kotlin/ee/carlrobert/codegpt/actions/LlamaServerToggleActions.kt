@@ -52,7 +52,7 @@ abstract class LlamaServerToggleActions(
     override fun actionPerformed(e: AnActionEvent) {
         val modelSelectionService = ModelSelectionService.getInstance()
         val isLlamaUsed =
-            (modelSelectionService.getServiceForFeature(FeatureType.CHAT) == LLAMA_CPP ||
+            (modelSelectionService.getServiceForFeature(FeatureType.INLINE_EDIT) == LLAMA_CPP ||
                     modelSelectionService.getServiceForFeature(FeatureType.CODE_COMPLETION) == LLAMA_CPP)
         isLlamaUsed.takeIf { it } ?: return
         notification?.expire()

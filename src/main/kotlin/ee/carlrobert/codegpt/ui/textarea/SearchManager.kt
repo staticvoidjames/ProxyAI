@@ -31,7 +31,7 @@ class SearchManager(
 
     fun getDefaultGroups() = when (featureType) {
         FeatureType.INLINE_EDIT -> getInlineEditGroups()
-        FeatureType.CHAT -> getAgentGroups()
+        FeatureType.LOOKUP -> getAgentGroups()
         else -> getAllGroups()
     }
 
@@ -47,7 +47,7 @@ class SearchManager(
         FilesGroupItem(project, tagManager),
         FoldersGroupItem(project, tagManager),
         if (GitFeatureAvailability.isAvailable) GitGroupItem(project) else null,
-        MCPGroupItem(tagManager, FeatureType.CHAT),
+        MCPGroupItem(tagManager, FeatureType.INLINE_EDIT),
         ImageActionItem(project, tagManager)
     ).filter { it.enabled }
 
@@ -57,7 +57,7 @@ class SearchManager(
         if (GitFeatureAvailability.isAvailable) GitGroupItem(project) else null,
         HistoryGroupItem(),
         PersonasGroupItem(tagManager),
-        MCPGroupItem(tagManager, featureType ?: FeatureType.CHAT),
+        MCPGroupItem(tagManager, featureType ?: FeatureType.INLINE_EDIT),
         DiagnosticsActionItem(tagManager),
         WebActionItem(tagManager),
         ImageActionItem(project, tagManager)
@@ -82,7 +82,7 @@ class SearchManager(
             }
         }
 
-        if (featureType != FeatureType.INLINE_EDIT && featureType != FeatureType.CHAT) {
+        if (featureType != FeatureType.INLINE_EDIT && featureType != FeatureType.LOOKUP) {
             val webAction = WebActionItem(tagManager)
             if (webAction.enabled) {
                 allResults.add(webAction)

@@ -341,7 +341,7 @@ class UserInputHeaderPanel(
     }
 
     private fun addInitialTags() {
-        if (featureType == FeatureType.CHAT) {
+        if (featureType == FeatureType.INLINE_EDIT) {
             return
         }
 

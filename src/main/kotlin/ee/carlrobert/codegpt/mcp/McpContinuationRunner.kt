@@ -53,7 +53,7 @@ class McpContinuationRunner(
             try {
                 val service = CompletionRequestService.getInstance()
                 val serviceType =
-                    ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT)
+                    ModelSelectionService.getInstance().getServiceForFeature(FeatureType.INLINE_EDIT)
                 val factory = CompletionRequestFactory.getFactory(serviceType)
                 val request = factory.createChatRequest(continuationParams)
                 val continuationListener = McpToolCallEventListener(

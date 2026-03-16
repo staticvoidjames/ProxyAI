@@ -41,7 +41,6 @@ object LegacySettingsMigration {
         return ModelSettingsState().apply {
             val chatModel = getLegacyChatModelForService(selectedService)
 
-            setModelSelection(FeatureType.CHAT, chatModel, selectedService)
             // setModelSelection(FeatureType.COMMIT_MESSAGE, chatModel, selectedService)
             setModelSelection(FeatureType.INLINE_EDIT, chatModel, selectedService)
             setModelSelection(FeatureType.LOOKUP, chatModel, selectedService)

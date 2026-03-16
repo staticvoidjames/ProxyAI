@@ -198,12 +198,12 @@ class UserInputPanel @JvmOverloads constructor(
         isEnabled = false
         cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
     }
-    private val promptEnhancer = if (featureType == FeatureType.CHAT) {
+    private val promptEnhancer = if (featureType == FeatureType.INLINE_EDIT) {
         PromptEnhancer(project)
     } else {
         null
     }
-    private val promptEnhancerButton = if (featureType == FeatureType.CHAT) {
+    private val promptEnhancerButton = if (featureType == FeatureType.INLINE_EDIT) {
         IconActionButton(
             object : AnAction(
                 CodeGPTBundle.get("smartTextPane.promptEnhancer.title"),
@@ -222,7 +222,7 @@ class UserInputPanel @JvmOverloads constructor(
     } else {
         null
     }
-    private val sessionTimelineButton = if (featureType == FeatureType.CHAT) {
+    private val sessionTimelineButton = if (featureType == FeatureType.INLINE_EDIT) {
         IconActionButton(
             object : AnAction(
                 "Timeline",
@@ -241,7 +241,7 @@ class UserInputPanel @JvmOverloads constructor(
     } else {
         null
     }
-    private val sessionTimelineSeparator = if (featureType == FeatureType.CHAT) {
+    private val sessionTimelineSeparator = if (featureType == FeatureType.INLINE_EDIT) {
         createActionSeparator()
     } else {
         null
@@ -607,7 +607,7 @@ class UserInputPanel @JvmOverloads constructor(
                             cell(thinkingPanel).gap(RightGap.SMALL)
                             cell(acceptChip).gap(RightGap.SMALL)
                             cell(rejectChip).gap(RightGap.SMALL)
-                            if (featureType == FeatureType.CHAT) {
+                            if (featureType == FeatureType.INLINE_EDIT) {
                                 cell(createActionSeparator()).gap(RightGap.SMALL)
                                 cell(editModeCheckbox)
                             }

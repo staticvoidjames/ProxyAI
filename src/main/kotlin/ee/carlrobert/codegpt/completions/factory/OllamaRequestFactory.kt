@@ -14,7 +14,7 @@ import ee.carlrobert.llm.completion.CompletionRequest
 class OllamaRequestFactory : BaseRequestFactory() {
 
     override fun createChatRequest(params: ChatCompletionParameters): CompletionRequest {
-        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.CHAT)
+        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.INLINE_EDIT)
         val configuration = service<ConfigurationSettings>().state
 
         return OpenAIChatCompletionRequest.Builder(

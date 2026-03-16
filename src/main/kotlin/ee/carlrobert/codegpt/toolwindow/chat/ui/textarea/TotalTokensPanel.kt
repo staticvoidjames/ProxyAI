@@ -201,7 +201,7 @@ class TotalTokensPanel(
     }
 
     private fun getIconToolTipText(html: String): String {
-        return if (ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT) != ServiceType.OPENAI) {
+        return if (ModelSelectionService.getInstance().getServiceForFeature(FeatureType.INLINE_EDIT) != ServiceType.OPENAI) {
             """
             <html>
             <body style="margin: 0; padding: 0;">

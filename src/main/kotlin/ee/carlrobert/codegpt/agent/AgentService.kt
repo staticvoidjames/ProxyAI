@@ -111,7 +111,7 @@ class AgentService(private val project: Project) {
             return
         }
 
-        val provider = service<ModelSelectionService>().getServiceForFeature(FeatureType.CHAT)
+        val provider = service<ModelSelectionService>().getServiceForFeature(FeatureType.INLINE_EDIT)
         val contentManager = project.service<AgentToolWindowContentManager>()
         val runtimeAgentId = contentManager.getSession(sessionId)?.runtimeAgentId
         val runtime = ensureSessionRuntime(sessionId, provider, events)

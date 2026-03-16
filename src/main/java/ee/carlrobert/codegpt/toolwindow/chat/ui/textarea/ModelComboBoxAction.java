@@ -68,7 +68,7 @@ public class ModelComboBoxAction extends ComboBoxAction {
       Consumer<ServiceType> onModelChange,
       ServiceType selectedService) {
     this(project, onModelChange, selectedService, Arrays.asList(ServiceType.values()), true,
-        FeatureType.CHAT);
+        FeatureType.INLINE_EDIT);
   }
 
   public ModelComboBoxAction(
@@ -78,7 +78,7 @@ public class ModelComboBoxAction extends ComboBoxAction {
       List<ServiceType> availableProviders,
       boolean showConfigureModels) {
     this(project, onModelChange, selectedProvider, availableProviders, showConfigureModels,
-        FeatureType.CHAT);
+        FeatureType.INLINE_EDIT);
   }
 
   public ModelComboBoxAction(
@@ -173,7 +173,7 @@ public class ModelComboBoxAction extends ComboBoxAction {
     if (availableProviders.contains(OPENAI)) {
       var openaiGroup = DefaultActionGroup.createPopupGroup(() -> "OpenAI");
       openaiGroup.getTemplatePresentation().setIcon(Icons.OpenAI);
-      if (featureType == FeatureType.CHAT) {
+      if (featureType == FeatureType.INLINE_EDIT) {
         addOpenAIGroupForAgent(openaiGroup, presentation);
       } else {
         addOpenAIGroupForChat(openaiGroup, presentation);

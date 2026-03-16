@@ -30,7 +30,7 @@ class CodeGPTRequestFactory(private val classStructureSerializer: ClassStructure
     BaseRequestFactory() {
 
     override fun createChatRequest(params: ChatCompletionParameters): ChatCompletionRequest {
-        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.CHAT)
+        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.INLINE_EDIT)
 
         val configuration = service<ConfigurationSettings>().state
         val messages = buildCodeGPTMessages(model, params, emptyList(), null)

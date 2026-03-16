@@ -34,7 +34,7 @@ class ChatCompletionParameters private constructor(
     var toolResults: List<Pair<ToolCall, String>>? = null,
     var project: Project?,
     var chatMode: ChatMode = ChatMode.ASK,
-    var featureType: FeatureType = FeatureType.CHAT,
+    var featureType: FeatureType = FeatureType.INLINE_EDIT,
     var requestType: RequestType = RequestType.NORMAL_REQUEST
 ) : CompletionParameters {
 
@@ -74,7 +74,7 @@ class ChatCompletionParameters private constructor(
         private var toolResults: List<Pair<ToolCall, String>>? = null
         private var project: Project? = null
         private var chatMode: ChatMode = ChatMode.ASK
-        private var featureType: FeatureType = FeatureType.CHAT
+        private var featureType: FeatureType = FeatureType.INLINE_EDIT
         private var requestType: RequestType = RequestType.NORMAL_REQUEST
 
         fun sessionId(sessionId: UUID?) = apply { this.sessionId = sessionId }

@@ -42,7 +42,7 @@ class RenameCompletionLookupListener : LookupManagerListener {
         val featureEnabled = service<ConfigurationSettings>().state.methodNameGenerationEnabled
         if (isPromptTextFieldDocument
             || !featureEnabled
-            || !CompletionRequestService.isRequestAllowed(FeatureType.CHAT)
+            || !CompletionRequestService.isRequestAllowed(FeatureType.INLINE_EDIT)
         ) {
             return
         }

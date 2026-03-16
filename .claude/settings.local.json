@@ -34,7 +34,8 @@
       "Bash(./gradlew build:*)",
       "Bash(./gradlew compileKotlin:*)",
       "mcp__zread__read_file",
-      "Bash(./gradlew compile:*)"
+      "Bash(./gradlew compile:*)",
+      "Bash(./gradlew compileJava --no-daemon 2>&1 | head -50)"
     ]
   }
 }

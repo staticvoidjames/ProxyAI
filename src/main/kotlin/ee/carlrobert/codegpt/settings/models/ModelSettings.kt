@@ -19,15 +19,9 @@ class ModelSettings : SimplePersistentStateComponent<ModelSettingsState>(ModelSe
     )
 
     private val publisherMethods = mapOf(
-        FeatureType.CHAT to PublisherMethod { publisher, model, serviceType ->
-            publisher.chatModelChanged(model, serviceType)
-        },
         FeatureType.CODE_COMPLETION to PublisherMethod { publisher, model, serviceType ->
             publisher.codeModelChanged(model, serviceType)
         },
-        // FeatureType.COMMIT_MESSAGE to PublisherMethod { publisher, model, serviceType ->
-        //     publisher.commitMessageModelChanged(model, serviceType)
-        // },
         FeatureType.INLINE_EDIT to PublisherMethod { publisher, model, serviceType ->
             publisher.inlineEditModelChanged(model, serviceType)
         },

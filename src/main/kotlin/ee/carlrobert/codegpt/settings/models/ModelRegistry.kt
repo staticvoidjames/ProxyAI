@@ -64,7 +64,6 @@ class ModelRegistry {
         ServiceType.OPENAI to ModelCapability(
             ServiceType.OPENAI,
             setOf(
-                FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
@@ -73,7 +72,6 @@ class ModelRegistry {
         ServiceType.ANTHROPIC to ModelCapability(
             ServiceType.ANTHROPIC,
             setOf(
-                FeatureType.CHAT,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -81,7 +79,6 @@ class ModelRegistry {
         ServiceType.GOOGLE to ModelCapability(
             ServiceType.GOOGLE,
             setOf(
-                FeatureType.CHAT,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
             )
@@ -89,7 +86,6 @@ class ModelRegistry {
         ServiceType.OLLAMA to ModelCapability(
             ServiceType.OLLAMA,
             setOf(
-                FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
@@ -98,14 +94,13 @@ class ModelRegistry {
         ServiceType.LLAMA_CPP to ModelCapability(
             ServiceType.LLAMA_CPP,
             setOf(
-                FeatureType.CHAT, FeatureType.CODE_COMPLETION,
+                FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT, FeatureType.LOOKUP
             )
         ),
         ServiceType.CUSTOM_OPENAI to ModelCapability(
             ServiceType.CUSTOM_OPENAI,
             setOf(
-                FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
@@ -114,7 +109,6 @@ class ModelRegistry {
         ServiceType.INCEPTION to ModelCapability(
             ServiceType.INCEPTION,
             setOf(
-                FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP,
@@ -125,11 +119,6 @@ class ModelRegistry {
 
     private val pricingPlanBasedDefaults = mapOf(
         PricingPlan.ANONYMOUS to mapOf(
-            FeatureType.CHAT to ModelSelection(
-                ServiceType.OPENAI,
-                GPT_5_MINI,
-                "GPT-5 Mini"
-            ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT_5_MINI,
@@ -152,7 +141,6 @@ class ModelRegistry {
             )
         ),
         PricingPlan.FREE to mapOf(
-            FeatureType.CHAT to ModelSelection(ServiceType.OPENAI, GPT_5_MINI, "GPT-5 Mini"),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT_5_MINI,
@@ -171,11 +159,6 @@ class ModelRegistry {
             )
         ),
         PricingPlan.INDIVIDUAL to mapOf(
-            FeatureType.CHAT to ModelSelection(
-                ServiceType.OPENAI,
-                GPT5_2.id,
-                "GPT-5.2"
-            ),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT_5_MINI,
@@ -196,11 +179,6 @@ class ModelRegistry {
     )
 
     private val fallbackDefaults = mapOf(
-        FeatureType.CHAT to ModelSelection(
-            ServiceType.OPENAI,
-            GPT_5_MINI,
-            "GPT-5 Mini"
-        ),
         FeatureType.INLINE_EDIT to ModelSelection(
             ServiceType.OPENAI,
             GPT_5_MINI,
@@ -217,7 +195,7 @@ class ModelRegistry {
 
     fun getAllModelsForFeature(featureType: FeatureType): List<ModelSelection> {
         return when (featureType) {
-            FeatureType.CHAT, FeatureType.INLINE_EDIT, FeatureType.LOOKUP -> getAllChatModels()
+            FeatureType.INLINE_EDIT, FeatureType.LOOKUP -> getAllChatModels()
             FeatureType.CODE_COMPLETION -> getAllCodeModels()
             FeatureType.NEXT_EDIT -> getNextEditModels()
         }

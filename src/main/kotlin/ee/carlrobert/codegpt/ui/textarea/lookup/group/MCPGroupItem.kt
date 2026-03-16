@@ -19,7 +19,7 @@ import javax.swing.Icon
 
 class MCPGroupItem(
     private val tagManager: TagManager,
-    private val featureType: FeatureType = FeatureType.CHAT
+    private val featureType: FeatureType = FeatureType.INLINE_EDIT
 ) : AbstractLookupGroupItem() {
 
     override val displayName: String = CodeGPTBundle.get("suggestionGroupItem.mcp.displayName")
@@ -27,7 +27,7 @@ class MCPGroupItem(
     override val enabled: Boolean = isEnabled()
 
     fun isEnabled(): Boolean {
-        if (featureType == FeatureType.CHAT) {
+        if (featureType == FeatureType.INLINE_EDIT) {
             return true
         }
         val serviceType = service<ModelSelectionService>().getServiceForFeature(featureType)

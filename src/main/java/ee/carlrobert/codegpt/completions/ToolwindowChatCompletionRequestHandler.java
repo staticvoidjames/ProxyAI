@@ -113,7 +113,7 @@ public class ToolwindowChatCompletionRequestHandler {
     try {
       CompletionProgressNotifier.Companion.update(project, true);
       var serviceType =
-          ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT);
+          ModelSelectionService.getInstance().getServiceForFeature(FeatureType.INLINE_EDIT);
       var eventListener = getEventListener(callParameters);
       var request = CompletionRequestFactory.getFactory(serviceType)
           .createChatRequest(callParameters);

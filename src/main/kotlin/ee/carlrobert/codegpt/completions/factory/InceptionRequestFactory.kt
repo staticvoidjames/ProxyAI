@@ -15,7 +15,7 @@ import ee.carlrobert.llm.completion.CompletionRequest
 class InceptionRequestFactory : BaseRequestFactory() {
 
     override fun createChatRequest(params: ChatCompletionParameters): OpenAIChatCompletionRequest {
-        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.CHAT)
+        val model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.INLINE_EDIT)
         val messages = OpenAIRequestFactory.buildOpenAIMessages(
             model = model,
             callParameters = params

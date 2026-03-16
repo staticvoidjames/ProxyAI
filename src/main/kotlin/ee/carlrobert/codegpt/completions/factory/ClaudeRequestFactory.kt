@@ -19,7 +19,7 @@ class ClaudeRequestFactory : BaseRequestFactory() {
 
     override fun createChatRequest(params: ChatCompletionParameters): ClaudeCompletionRequest {
         return ClaudeCompletionRequest().apply {
-            model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.CHAT)
+            model = ModelSelectionService.getInstance().getModelForFeature(FeatureType.INLINE_EDIT)
             maxTokens = service<ConfigurationSettings>().state.maxTokens
             isStream = true
 

@@ -168,8 +168,8 @@ public final class CompletionRequestService {
   public EventSource getChatCompletionAsync(
       CompletionRequest request,
       CompletionEventListener<String> eventListener) {
-    var serviceType = ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT);
-    return getChatCompletionAsync(request, eventListener, serviceType, FeatureType.CHAT);
+    var serviceType = ModelSelectionService.getInstance().getServiceForFeature(FeatureType.INLINE_EDIT);
+    return getChatCompletionAsync(request, eventListener, serviceType, FeatureType.INLINE_EDIT);
   }
 
   public EventSource getChatCompletionAsync(

@@ -3,9 +3,18 @@ package ee.carlrobert.codegpt.completions;
 import static ee.carlrobert.codegpt.credentials.CredentialsStore.getCredential;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.net.ssl.CertificateManager;
+
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.X509TrustManager;
+
 import ee.carlrobert.codegpt.credentials.CredentialsStore.CredentialKey;
 import ee.carlrobert.codegpt.settings.advanced.AdvancedSettings;
+import ee.carlrobert.codegpt.settings.configuration.ConfigurationSettings;
 import ee.carlrobert.codegpt.settings.service.anthropic.AnthropicSettings;
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings;
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings;
@@ -15,19 +24,10 @@ import ee.carlrobert.llm.client.codegpt.CodeGPTClient;
 import ee.carlrobert.llm.client.google.GoogleClient;
 import ee.carlrobert.llm.client.inception.InceptionClient;
 import ee.carlrobert.llm.client.llama.LlamaClient;
-import ee.carlrobert.llm.client.mistral.MistralClient;
 import ee.carlrobert.llm.client.ollama.OllamaClient;
 import ee.carlrobert.llm.client.openai.OpenAIClient;
-import ee.carlrobert.llm.client.openai.completion.ErrorDetails;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import javax.net.ssl.X509TrustManager;
-import com.intellij.openapi.diagnostic.Logger;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
-import ee.carlrobert.codegpt.settings.configuration.ConfigurationSettings;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class CompletionClientProvider {

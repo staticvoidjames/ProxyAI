@@ -23,7 +23,6 @@ public final class Icons {
   public static final Icon OpenAI = IconLoader.getIcon("/icons/openai.svg", Icons.class);
   public static final Icon MCP = IconLoader.getIcon("/icons/mcp.svg", Icons.class);
   public static final Icon Meta = IconLoader.getIcon("/icons/meta.svg", Icons.class);
-  public static final Icon Mistral = IconLoader.getIcon("/icons/mistral.svg", Icons.class);
   public static final Icon Moonshot = IconLoader.getIcon("/icons/moonshot.svg", Icons.class);
   public static final Icon Morph = IconLoader.getIcon("/icons/morph.svg", Icons.class);
   public static final Icon Relace = IconLoader.getIcon("/icons/relace.svg", Icons.class);

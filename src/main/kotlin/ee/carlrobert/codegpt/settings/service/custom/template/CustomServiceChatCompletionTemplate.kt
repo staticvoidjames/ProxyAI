@@ -90,16 +90,6 @@ enum class CustomServiceChatCompletionTemplate(
         getDefaultHeaders(),
         getDefaultBodyParams(emptyMap())
     ),
-    MISTRAL_AI(
-        "https://api.mistral.ai/v1/chat/completions",
-        getDefaultHeaders("Authorization", "Bearer \$CUSTOM_SERVICE_API_KEY"),
-        getDefaultBodyParams(
-            mapOf(
-                "model" to "open-mistral-7b",
-                "max_tokens" to 8192
-            )
-        )
-    ),
     OPEN_ROUTER(
         "https://openrouter.ai/api/v1/chat/completions",
         getDefaultHeaders(

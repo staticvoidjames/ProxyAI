@@ -39,9 +39,9 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
     override val providerPresentation: InlineCompletionProviderPresentation
         get() = CodeCompletionProviderPresentation()
 
-    override fun shouldBeForced(request: InlineCompletionRequest): Boolean {
-        return request.event is InlineCompletionEvent.DirectCall || tryFindCache(request) != null
-    }
+    // override fun shouldBeForced(request: InlineCompletionRequest): Boolean {
+    //     return request.event is InlineCompletionEvent.DirectCall || tryFindCache(request) != null
+    // }
 
     override suspend fun getSuggestionDebounced(request: InlineCompletionRequest): InlineCompletionSuggestion {
         val editor = request.editor
@@ -67,7 +67,6 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
 
                 CompletionProgressNotifier.update(project, true)
 
-                var eventListener = CodeCompletionEventListener(request.editor, this)
                 val infillRequest = InfillRequestUtil.buildInfillRequest(request)
 
                 val call = service<CodeCompletionService>().getCodeCompletionAsync(

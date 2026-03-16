@@ -38,19 +38,6 @@ enum class CustomServiceCodeCompletionTemplate(
             "max_tokens" to 24
         )
     ),
-    MISTRAL_AI(
-        "https://api.mistral.ai/v1/fim/completions",
-        getDefaultHeaders("Authorization", "Bearer \$CUSTOM_SERVICE_API_KEY"),
-        mutableMapOf(
-            "stream" to true,
-            "prompt" to "\$PREFIX",
-            "suffix" to "\$SUFFIX",
-            "model" to "codestral-latest",
-            "temperature" to 0.7,
-            "max_tokens" to 1024
-        ),
-        true
-    ),
     TOGETHER(
         "https://api.together.xyz/v1/completions",
         getDefaultHeaders("Authorization", "Bearer \$CUSTOM_SERVICE_API_KEY"),

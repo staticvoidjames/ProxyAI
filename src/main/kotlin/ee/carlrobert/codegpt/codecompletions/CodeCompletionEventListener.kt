@@ -67,7 +67,7 @@ class CodeCompletionEventListener(
                 return
             }
 
-            var finalResult = CodeCompletionFormatter(editor).format(result.toString())
+            val finalResult = CodeCompletionFormatter(editor).format(result.toString())
             cache?.setCache(prefix, suffix, finalResult)
             runInEdt { channel.trySend(InlineCompletionGrayTextElement(finalResult)) }
         } finally {

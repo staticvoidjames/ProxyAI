@@ -64,7 +64,6 @@ class ModelRegistry {
         ServiceType.OPENAI to ModelCapability(
             ServiceType.OPENAI,
             setOf(
-                FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
@@ -74,7 +73,6 @@ class ModelRegistry {
         ServiceType.ANTHROPIC to ModelCapability(
             ServiceType.ANTHROPIC,
             setOf(
-                FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
@@ -83,7 +81,6 @@ class ModelRegistry {
         ServiceType.GOOGLE to ModelCapability(
             ServiceType.GOOGLE,
             setOf(
-                FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.INLINE_EDIT,
                 FeatureType.LOOKUP
@@ -92,7 +89,6 @@ class ModelRegistry {
         ServiceType.OLLAMA to ModelCapability(
             ServiceType.OLLAMA,
             setOf(
-                FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
@@ -109,7 +105,6 @@ class ModelRegistry {
         ServiceType.CUSTOM_OPENAI to ModelCapability(
             ServiceType.CUSTOM_OPENAI,
             setOf(
-                FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
@@ -119,7 +114,6 @@ class ModelRegistry {
         ServiceType.INCEPTION to ModelCapability(
             ServiceType.INCEPTION,
             setOf(
-                FeatureType.AGENT,
                 FeatureType.CHAT,
                 FeatureType.CODE_COMPLETION,
                 FeatureType.INLINE_EDIT,
@@ -131,11 +125,6 @@ class ModelRegistry {
 
     private val pricingPlanBasedDefaults = mapOf(
         PricingPlan.ANONYMOUS to mapOf(
-            FeatureType.AGENT to ModelSelection(
-                ServiceType.OPENAI,
-                GPT5_2.id,
-                "GPT-5.2"
-            ),
             FeatureType.CHAT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT_5_MINI,
@@ -163,11 +152,6 @@ class ModelRegistry {
             )
         ),
         PricingPlan.FREE to mapOf(
-            FeatureType.AGENT to ModelSelection(
-                ServiceType.OPENAI,
-                GPT5_2.id,
-                "GPT-5.2"
-            ),
             FeatureType.CHAT to ModelSelection(ServiceType.OPENAI, GPT_5_MINI, "GPT-5 Mini"),
             FeatureType.INLINE_EDIT to ModelSelection(
                 ServiceType.OPENAI,
@@ -187,11 +171,6 @@ class ModelRegistry {
             )
         ),
         PricingPlan.INDIVIDUAL to mapOf(
-            FeatureType.AGENT to ModelSelection(
-                ServiceType.OPENAI,
-                GPT5_2.id,
-                "GPT-5.2"
-            ),
             FeatureType.CHAT to ModelSelection(
                 ServiceType.OPENAI,
                 GPT5_2.id,
@@ -217,11 +196,6 @@ class ModelRegistry {
     )
 
     private val fallbackDefaults = mapOf(
-        FeatureType.AGENT to ModelSelection(
-            ServiceType.OPENAI,
-            GPT5_2.id,
-            "GPT-5.2"
-        ),
         FeatureType.CHAT to ModelSelection(
             ServiceType.OPENAI,
             GPT_5_MINI,
@@ -243,7 +217,6 @@ class ModelRegistry {
 
     fun getAllModelsForFeature(featureType: FeatureType): List<ModelSelection> {
         return when (featureType) {
-            FeatureType.AGENT -> getAllAgentModels()
             FeatureType.CHAT, FeatureType.INLINE_EDIT, FeatureType.LOOKUP -> getAllChatModels()
             FeatureType.CODE_COMPLETION -> getAllCodeModels()
             FeatureType.NEXT_EDIT -> getNextEditModels()
@@ -286,7 +259,6 @@ class ModelRegistry {
 
     private fun getAllModels(): List<ModelSelection> {
         return buildList {
-            addAll(getAllAgentModels())
             addAll(getAllApplyModels())
             addAll(getAllChatModels())
             addAll(getAllCodeModels())
@@ -377,69 +349,6 @@ class ModelRegistry {
         )
     }
 
-    private fun getAllAgentModels(): List<ModelSelection> {
-        return buildList {
-            addAll(getAnthropicAgentModels())
-            addAll(getOpenAIAgentModels())
-            addAll(getCustomOpenAIModels())
-            addAll(getGoogleAgentModels())
-            addAll(getOllamaModels())
-            addAll(getInceptionAgentModels())
-        }
-    }
-
-    fun getOpenAIAgentModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(ServiceType.OPENAI, GPT5_2.id, "GPT-5.2", Icons.OpenAI),
-            ModelSelection(ServiceType.OPENAI, GPT5_2_Codex.id, "GPT-5.2 Codex", Icons.OpenAI),
-            ModelSelection(ServiceType.OPENAI, GPT5_1.id, "GPT-5.1", Icons.OpenAI),
-            ModelSelection(ServiceType.OPENAI, GPT5_1Codex.id, "GPT-5.1 Codex", Icons.OpenAI),
-            ModelSelection(ServiceType.OPENAI, GPT5Mini.id, "GPT-5 Mini", Icons.OpenAI),
-        )
-    }
-
-    fun getAnthropicAgentModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(ServiceType.ANTHROPIC, Opus_4_5.id, "Claude Opus 4.5", Icons.Anthropic),
-            ModelSelection(
-                ServiceType.ANTHROPIC,
-                Sonnet_4_5.id,
-                "Claude Sonnet 4.5",
-                Icons.Anthropic
-            ),
-            ModelSelection(
-                ServiceType.ANTHROPIC,
-                Haiku_4_5.id,
-                "Claude Haiku 4.5",
-                Icons.Anthropic
-            ),
-        )
-    }
-
-    fun getGoogleAgentModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(
-                ServiceType.GOOGLE,
-                Gemini3_Pro_Preview.id,
-                "Gemini 3 Pro Preview",
-                Icons.Google
-            ),
-            ModelSelection(
-                ServiceType.GOOGLE,
-                Gemini3_Flash_Preview.id,
-                "Gemini 3 Flash Preview",
-                Icons.Google
-            ),
-            ModelSelection(ServiceType.GOOGLE, Gemini2_5Pro.id, "Gemini 2.5 Pro", Icons.Google),
-            ModelSelection(
-                ServiceType.GOOGLE,
-                Gemini2_5Flash.id,
-                "Gemini 2.5 Flash",
-                Icons.Google
-            ),
-        )
-    }
-
     private fun getAllChatModels(): List<ModelSelection> {
         return buildList {
             addAll(getOpenAIChatModels())
@@ -509,12 +418,6 @@ class ModelRegistry {
         return listOf(
             ModelSelection(ServiceType.INCEPTION, MERCURY, "Mercury"),
             ModelSelection(ServiceType.INCEPTION, MERCURY_CODER, "Mercury Coder")
-        )
-    }
-
-    fun getInceptionAgentModels(): List<ModelSelection> {
-        return listOf(
-            ModelSelection(ServiceType.INCEPTION, MERCURY, "Mercury"),
         )
     }
 

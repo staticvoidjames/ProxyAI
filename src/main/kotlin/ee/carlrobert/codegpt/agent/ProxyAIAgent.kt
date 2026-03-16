@@ -85,7 +85,7 @@ object ProxyAIAgent {
         pendingMessages: ConcurrentHashMap<String, ArrayDeque<MessageWithContext>>,
     ): GraphAIAgentService<MessageWithContext, String> {
         val modelSelection =
-            service<ModelSelectionService>().getModelSelectionForFeature(FeatureType.AGENT)
+            service<ModelSelectionService>().getModelSelectionForFeature(FeatureType.CHAT)
         val skills = project.service<SkillDiscoveryService>().listSkills()
         val stream = provider != ServiceType.CUSTOM_OPENAI
         val projectInstructions = loadProjectInstructions(project.basePath)

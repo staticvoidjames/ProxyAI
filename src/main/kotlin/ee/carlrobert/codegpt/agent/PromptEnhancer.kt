@@ -38,7 +38,7 @@ class PromptEnhancer(private val project: Project) {
         val historyContext = buildHistoryContext(sessionId)
 
         val modelService = service<ModelSelectionService>()
-        val provider = modelService.getServiceForFeature(FeatureType.AGENT)
+        val provider = modelService.getServiceForFeature(FeatureType.CHAT)
         val model = modelService.getAgentModel()
         val executor = AgentFactory.createExecutor(provider)
 

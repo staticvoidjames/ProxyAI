@@ -341,7 +341,7 @@ class UserInputHeaderPanel(
     }
 
     private fun addInitialTags() {
-        if (featureType == FeatureType.AGENT) {
+        if (featureType == FeatureType.CHAT) {
             return
         }
 

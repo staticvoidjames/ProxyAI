@@ -200,7 +200,7 @@ object AgentFactory {
 
             ServiceType.CUSTOM_OPENAI -> {
                 val state = service<CustomServicesSettings>()
-                    .customServiceStateForFeatureType(FeatureType.AGENT)
+                    .customServiceStateForFeatureType(FeatureType.CHAT)
                 val serviceId = state.id
                     ?: throw IllegalArgumentException("No custom service configured")
                 val apiKey = getCredential(CredentialKey.CustomServiceApiKeyById(serviceId))

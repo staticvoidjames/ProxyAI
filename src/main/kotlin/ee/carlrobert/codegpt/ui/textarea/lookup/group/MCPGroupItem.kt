@@ -27,7 +27,7 @@ class MCPGroupItem(
     override val enabled: Boolean = isEnabled()
 
     fun isEnabled(): Boolean {
-        if (featureType == FeatureType.AGENT) {
+        if (featureType == FeatureType.CHAT) {
             return true
         }
         val serviceType = service<ModelSelectionService>().getServiceForFeature(featureType)

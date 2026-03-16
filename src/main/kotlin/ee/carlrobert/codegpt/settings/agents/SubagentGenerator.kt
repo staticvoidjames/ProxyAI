@@ -30,7 +30,7 @@ object SubagentGenerator {
     suspend fun generate(query: String): GeneratedSubagent {
         return try {
             val modelService = service<ModelSelectionService>()
-            val provider: ServiceType = modelService.getServiceForFeature(FeatureType.AGENT)
+            val provider: ServiceType = modelService.getServiceForFeature(FeatureType.CHAT)
             val model = modelService.getAgentModel()
             val executor = AgentFactory.createExecutor(provider)
 

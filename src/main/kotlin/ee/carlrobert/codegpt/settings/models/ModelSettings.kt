@@ -19,9 +19,6 @@ class ModelSettings : SimplePersistentStateComponent<ModelSettingsState>(ModelSe
     )
 
     private val publisherMethods = mapOf(
-        FeatureType.AGENT to PublisherMethod { publisher, model, serviceType ->
-            publisher.agentModelChanged(model, serviceType)
-        },
         FeatureType.CHAT to PublisherMethod { publisher, model, serviceType ->
             publisher.chatModelChanged(model, serviceType)
         },

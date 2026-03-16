@@ -173,7 +173,7 @@ public class ModelComboBoxAction extends ComboBoxAction {
     if (availableProviders.contains(OPENAI)) {
       var openaiGroup = DefaultActionGroup.createPopupGroup(() -> "OpenAI");
       openaiGroup.getTemplatePresentation().setIcon(Icons.OpenAI);
-      if (featureType == FeatureType.AGENT) {
+      if (featureType == FeatureType.CHAT) {
         addOpenAIGroupForAgent(openaiGroup, presentation);
       } else {
         addOpenAIGroupForChat(openaiGroup, presentation);

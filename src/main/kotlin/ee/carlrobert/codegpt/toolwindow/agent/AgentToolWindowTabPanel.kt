@@ -115,7 +115,7 @@ class AgentToolWindowTabPanel(
             psiRepository
         ),
         this,
-        FeatureType.AGENT,
+        FeatureType.CHAT,
         tagManager,
         onSubmit = ::handleSubmit,
         onStop = ::handleCancel,
@@ -277,7 +277,7 @@ class AgentToolWindowTabPanel(
         disposeLandingPanelIfPresent()
         scrollablePanel.clearLandingViewIfVisible()
         agentSession.serviceType =
-            ModelSelectionService.getInstance().getServiceForFeature(FeatureType.AGENT)
+            ModelSelectionService.getInstance().getServiceForFeature(FeatureType.CHAT)
 
         val agentService = project.service<AgentService>()
 

@@ -198,12 +198,12 @@ class UserInputPanel @JvmOverloads constructor(
         isEnabled = false
         cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
     }
-    private val promptEnhancer = if (featureType == FeatureType.AGENT) {
+    private val promptEnhancer = if (featureType == FeatureType.CHAT) {
         PromptEnhancer(project)
     } else {
         null
     }
-    private val promptEnhancerButton = if (featureType == FeatureType.AGENT) {
+    private val promptEnhancerButton = if (featureType == FeatureType.CHAT) {
         IconActionButton(
             object : AnAction(
                 CodeGPTBundle.get("smartTextPane.promptEnhancer.title"),
@@ -222,7 +222,7 @@ class UserInputPanel @JvmOverloads constructor(
     } else {
         null
     }
-    private val sessionTimelineButton = if (featureType == FeatureType.AGENT) {
+    private val sessionTimelineButton = if (featureType == FeatureType.CHAT) {
         IconActionButton(
             object : AnAction(
                 "Timeline",
@@ -241,7 +241,7 @@ class UserInputPanel @JvmOverloads constructor(
     } else {
         null
     }
-    private val sessionTimelineSeparator = if (featureType == FeatureType.AGENT) {
+    private val sessionTimelineSeparator = if (featureType == FeatureType.CHAT) {
         createActionSeparator()
     } else {
         null

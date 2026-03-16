@@ -14,7 +14,7 @@ import ee.carlrobert.llm.client.codegpt.PricingPlan
 class ModelSelectionService {
 
     fun getAgentModel(): LLModel {
-        val modelDetailsState = service<ModelSettings>().state.getModelSelection(FeatureType.AGENT)
+        val modelDetailsState = service<ModelSettings>().state.getModelSelection(FeatureType.CHAT)
         val model = modelDetailsState?.model
         val provider = modelDetailsState?.provider
         val models = service<ModelRegistry>().getAgentModels()[provider]
